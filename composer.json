@@ -1,0 +1,18 @@
+{
+    "name": "slince/router",
+    "description": "slince router component",
+    "require": {
+        "aura/router": "2.2.0"
+    },
+    "autoload": {
+        "Slince/Router": "./"
+    },
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Tao",
+            "email": "taosikai@sina.cn"
+        }
+    ],
+    "minimum-stability": "dev"
+}
