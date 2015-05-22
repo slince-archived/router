@@ -25,15 +25,27 @@ class RouteCollection
         return $this->_anonymousRoutes;
     }
     
-    function any($uri, $params, $options = [])
+    function any($uri, $params, $tokens = [], $options = [])
     {
-        $route = RouteFactory::create($uri, $params, $options);
+        $route = RouteFactory::create($uri, $params,$tokens, $options);
         $this->add($route);
     }
     
-    function get($uri, $params, $options = [])
+    function any($uri, $params, $tokens = [], $options = [])
     {
-        $options = ['allowedHttpMethods'=>[HttpMethods::HTTP_GET]] + $options;
+        $options = ['allowedHttpMethods' => [HttpMethods::HTTP_GET]] + $options;
+        $this->any($uri, $action, $options);
+    }
+    
+    function any($uri, $params, $tokens = [], $options = [])
+    {
+        $options = ['allowedHttpMethods' => [HttpMethods::HTTP_POST]] + $options;
+        $this->any($uri, $action, $options);
+    }
+    
+    function any($uri, $params, $tokens = [], $options = [])
+    {
+        $options = ['allowedHttpMethods' => [HttpMethods::HTTP_DELETE]] + $options;
         $this->any($uri, $action, $options);
     }
 }

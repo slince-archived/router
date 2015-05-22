@@ -7,6 +7,8 @@ class Route implements RouteInterface
     private $_uri;
 
     private $_params;
+    
+    private $_tokens = [];
 
     private $_options = [
         'name' => null,
@@ -15,10 +17,11 @@ class Route implements RouteInterface
         'redirect' => null
     ];
 
-    function __construct($uri, $params, $options = [])
+    function __construct($uri, $params, $tokens = [], $options = [])
     {
         $this->_uri = $uri;
         $this->_params = $params;
+        $this->_tokens = $tokens;
         $this->_options = array_merge($this->_options, $options);
     }
 
@@ -41,6 +44,17 @@ class Route implements RouteInterface
     function setParams($params)
     {
         $this->_params = $params;
+        return $this;
+    }
+    
+    function getTokens()
+    {
+        return $this->_tokens;
+    }
+
+    function setTokens($tokens)
+    {
+        $this->_tokens = $tokens;
         return $this;
     }
 
