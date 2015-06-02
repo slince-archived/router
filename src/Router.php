@@ -1,28 +1,32 @@
 <?php
 namespace Slince\Router;
 
-use Aura\Router\RouterFactory;
-
 class Router
 {
+    /**
+     * @var RouteCollection
+     */
     private $_routeCollection = [];
     
-    function setRouteCollection($routeCollection)
+    function setRouteCollection(RouteCollection $routeCollection)
     {
         $this->_routeCollection = $routeCollection;
     }
     
     function prepare()
     {
-        foreach ($this->_routeCollection->getNamedRoutes() as $name => $route) {
-            RouterFactory::newInstance()->add($name, $route->getUri())
-                ->setTokens();
+        $routes = array_merge($this->_routeCollection->getNamedRoutes(), 
+            $this->_routeCollection->getAnonymousRoutes());
+        foreach ($routes as $route) {
+            RouterFactory::newInstance()->add($route->getName(), $route->getUri())
+                ->addTokens($route->getTokens())
+                ->addValues($route->getParams());
         }
     }
     
-    function match($uri)
+    function match($path)
     {
-        
+        $route = RouterFactory::newInstance()->match($path, $_SERVER);
     }
     
 }
