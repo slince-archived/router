@@ -3,9 +3,14 @@ namespace Slince\Router;
 
 interface RouteInterface
 {
-    function getParams();
-    
+
     function getUri();
-    
-    function getName();
+
+    function getParameters();
+
+    function getRequirements();
+
+    function getSchemes();
+
+    function getMethods();
 }
