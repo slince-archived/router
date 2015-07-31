@@ -13,4 +13,6 @@ interface RouteInterface
     function getSchemes();
 
     function getMethods();
+    
+    function setMethods(array $methods);
 }
