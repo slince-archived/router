@@ -3,8 +3,16 @@ namespace Slince\Router;
 
 class RouteCollection implements \Countable, \IteratorAggregate
 {
+    
+    use RouteCreatorTrait;
+    
     protected $_routes = [];
     
+    /**
+     * 子集
+     * 
+     * @var array
+     */
     protected $_subCollections = [];
     
     function __construct(array $routes = [])
@@ -12,6 +20,10 @@ class RouteCollection implements \Countable, \IteratorAggregate
         $this->_routes = $routes;
     }
     
+    static function create($routes = [])
+    {
+        return new self($routes);
+    }
     function count()
     {
         return count($this->_routes);
@@ -35,5 +47,10 @@ class RouteCollection implements \Countable, \IteratorAggregate
     function replace(array $routes)
     {
         $this->_routes = $routes;
+    }
+    
+    function addCollection($prefix, RouteCollection $routeCollection)
+    {
+        $this->_subCollections[$prefix] = $routeCollection;
     }
 }

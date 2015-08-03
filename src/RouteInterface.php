@@ -14,5 +14,9 @@ interface RouteInterface
 
     function getMethods();
     
+    function getDomain();
+    
+    function setDomain($domain);
+    
     function setMethods(array $methods);
 }
