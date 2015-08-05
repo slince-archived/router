@@ -17,9 +17,23 @@ class Route implements RouteInterface
     protected $_methods;
 
     protected $_domain;
+    
+    protected $_compiledRoute;
 
     function compile()
     {
-        return new SymfonyRoute($this->_uri, $this->_params);
+        $this->_compiledRoute = new SymfonyRoute($this->_uri, 
+            $this->_parameters, 
+            $this->_requirements, 
+            $this->_options,
+            $this->_domain,
+            $this->_schemes,
+            $this->_methods
+        );
+    }
+    
+    function getCompiledRoute()
+    {
+        return $this->_compiledRoute;
     }
 }
