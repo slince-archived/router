@@ -22,18 +22,18 @@ class Route implements RouteInterface
 
     function compile()
     {
-        $this->_compiledRoute = new SymfonyRoute($this->_uri, 
-            $this->_parameters, 
-            $this->_requirements, 
-            $this->_options,
-            $this->_domain,
-            $this->_schemes,
-            $this->_methods
-        );
-    }
-    
-    function getCompiledRoute()
-    {
+        if (! is_null($this->_compiledRoute)) {
+            $this->_compiledRoute = (new SymfonyRoute($this->_uri,
+                $this->_parameters,
+                $this->_requirements,
+                $this->_options,
+                $this->_domain,
+                $this->_schemes,
+                $this->_methods
+            ))->compile();
+        }
         return $this->_compiledRoute;
     }
+    
+    
 }
