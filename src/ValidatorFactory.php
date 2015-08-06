@@ -7,7 +7,7 @@ class ValidatorFactory
 {
     static $validators = [];
     
-    static function newValidators()
+    static function getDefaultValidators()
     {
         if (isset(self::$validators)) {
             return self::$validators;

@@ -23,13 +23,18 @@ class ValidatorCollection implements \Countable, \IteratorAggregate
         $this->_validators[] = $validator;
     }
 
+    function merge($validators)
+    {
+        $this->_validators += $validators;
+    }
+
     function delete(ValidatorInterface $validator)
     {
-        if (($key = array_search($validator, $this->_validators) !== false) {
+        if (($key = array_search($validator, $this->_validators)) !== false) {
             unset($this->_validators[$key]);
         }
     }
-    
+
     function count()
     {
         return count($this->_validators);
@@ -37,7 +42,6 @@ class ValidatorCollection implements \Countable, \IteratorAggregate
 
     function getIterator()
     {
-        return new \ArrayIterator$this->_validators)
-        ;
+        return new \ArrayIterator($this->_validators);
     }
 }
