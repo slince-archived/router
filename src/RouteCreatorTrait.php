@@ -4,64 +4,64 @@ namespace Slince\Router;
 trait RouteCreatorTrait
 {
 
-    function add($uri, $parameters)
+    function add($path, $parameters)
     {
-        return $this->addRoute($uri, $parameters);
+        return $this->addRoute($path, $parameters);
     }
 
-    function get($uri, $parameters)
+    function get($path, $parameters)
     {
-        return $this->addRoute($uri, $parameters)->setMethods([
+        return $this->addRoute($path, $parameters)->setMethods([
             HttpMethod::GET,
             HttpMethod::HEAD
         ]);
     }
 
-    function post($uri, $parameters)
+    function post($path, $parameters)
     {
-        return $this->addRoute($uri, $parameters)->setMethods([
+        return $this->addRoute($path, $parameters)->setMethods([
             HttpMethod::POST
         ]);
     }
 
-    function put($uri, $parameters)
+    function put($path, $parameters)
     {
-        return $this->addRoute($uri, $parameters)->setMethods([
+        return $this->addRoute($path, $parameters)->setMethods([
             HttpMethod::PUT
         ]);
     }
 
-    function patch($uri, $parameters)
+    function patch($path, $parameters)
     {
-        return $this->addRoute($uri, $parameters)->setMethods([
+        return $this->addRoute($path, $parameters)->setMethods([
             HttpMethod::PATCH
         ]);
     }
 
-    function patch($uri, $parameters)
+    function patch($path, $parameters)
     {
-        return $this->addRoute($uri, $parameters)->setMethods([
+        return $this->addRoute($path, $parameters)->setMethods([
             HttpMethod::PATCH
         ]);
     }
 
-    function delete($uri, $parameters)
+    function delete($path, $parameters)
     {
-        return $this->addRoute($uri, $parameters)->setMethods([
+        return $this->addRoute($path, $parameters)->setMethods([
             HttpMethod::DELETE
         ]);
     }
 
-    function addRoute($uri, $parameters)
+    function addRoute($path, $parameters)
     {
-        $route = $this->newRoute($uri, $parameters);
+        $route = $this->newRoute($path, $parameters);
         $this->add($route);
         return $route;
     }
 
-    function newRoute($uri, $parameters)
+    function newRoute($path, $parameters)
     {
-        return new Route($uri, $parameters);
+        return new Route($path, $parameters);
     }
     
     function prefix($prefix, \Closure $callback)

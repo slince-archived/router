@@ -6,7 +6,7 @@ use Symfony\Component\Routing\Route as SymfonyRoute;
 class Route implements RouteInterface
 {
 
-    protected $_uri;
+    protected $_path;
 
     protected $_parameters;
 
@@ -23,7 +23,7 @@ class Route implements RouteInterface
     function compile()
     {
         if (! is_null($this->_compiledRoute)) {
-            $this->_compiledRoute = (new SymfonyRoute($this->_uri,
+            $this->_compiledRoute = (new SymfonyRoute($this->_path,
                 $this->_parameters,
                 $this->_requirements,
                 $this->_options,
