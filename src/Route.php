@@ -20,20 +20,23 @@ class Route implements RouteInterface
     
     protected $_compiledRoute;
 
-    function compile()
+    function getCompiledRoute()
     {
         if (! is_null($this->_compiledRoute)) {
-            $this->_compiledRoute = (new SymfonyRoute($this->_path,
-                $this->_parameters,
-                $this->_requirements,
-                $this->_options,
-                $this->_domain,
-                $this->_schemes,
-                $this->_methods
-            ))->compile();
+            $this->recompile();
         }
         return $this->_compiledRoute;
     }
     
-    
+    function recompile()
+    {
+        return $this->_compiledRoute = (new SymfonyRoute($this->_path,
+            $this->_parameters,
+            $this->_requirements,
+            $this->_options,
+            $this->_domain,
+            $this->_schemes,
+            $this->_methods
+        ))->compile();
+    }
 }

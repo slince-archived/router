@@ -19,4 +19,11 @@ interface RouteInterface
     function setDomain($domain);
     
     function setMethods(array $methods);
+    
+    /**
+     * @return 
+     */
+    function getCompiledRoute();
+    
+    function recompile();
 }
