@@ -7,22 +7,23 @@ class Matcher implements MatcherInterface
 {
 
     /**
-     * route collection
-     *
-     * @var RouteCollection
+     * request context
+     * 
+     * @var RequestContext
      */
-    protected $_routeCollection;
+    protected $_requestContext;
 
     /**
      * validator collection
      *
      * @var ValidatorCollection
      */
-    protected $_validatorCollection;
+    protected $_validators;
 
-    function __construct(ValidatorCollection $validatorCollection = null)
+    function __construct(ValidatorCollection $validators = null, RequestContext $requestContext = null)
     {
-        $this->_validatorCollection = $validatorCollection;
+        $this->_validators = $validators;
+        $this->_requestContext = $requestContext;
     }
 
     /**
@@ -30,26 +31,57 @@ class Matcher implements MatcherInterface
      * 
      * @see \Slince\Router\MatcherInterface::match()
      */
-    function match($path, RouteCollection $routeCollection)
+    function match($path, RouteCollection $routes)
     {
-        $this->_routeCollection = $routeCollection;
+        foreach ($routes as $route) 
+        {
+            if ($this->_validate($route)) {
+                return $route;
+            }
+        }
+        return false;
     }
 
+    /**
+     * 验证route是否通过
+     * 
+     * @param RouteInterface $route
+     */
+    protected function _validate($route)
+    {
+        foreach ($this->_validators as $validator) {
+            if ($validator->validator->validate($route, $this->_requestContext)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
     function add($validator)
     {
         if ($validator instanceof \Closure) {
             $validator = ValidatorFactory::createCallbackValidator($validator);
         }
-        $this->_validatorCollection->add($validator);
+        $this->_validators->add($validator);
     }
 
     function getValidators()
     {
-        return $this->_validatorCollection;
+        return $this->_validators;
     }
     
     function setValidators(ValidatorCollection $validatorCollection)
     {
-        $this->_validatorCollection = $validatorCollection;
+        $this->_validators = $validatorCollection;
+    }
+    
+    function setRequestContext(RequestContext $requestContext)
+    {
+        $this->_requestContext = $requestContext;
+    }
+    
+    function getRequestContext()
+    {
+        return $this->_requestContext;
     }
 }
