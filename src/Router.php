@@ -10,7 +10,9 @@ class Router
      * @var RouteCollection
      */
     protected $_routeCollection;
-
+    
+    protected $_matcher;
+    
     function __construct(RouteCollection $routeCollection)
     {
         $this->_routeCollection = $routeCollection;
