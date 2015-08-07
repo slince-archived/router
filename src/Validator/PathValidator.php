@@ -12,8 +12,6 @@ class PathValidator implements ValidatorInterface
     
     function validate(RouteInterface $route, RequestContext $requestContext)
     {
-        if ($route->getCompiledRoute()->getHostRegex() && !preg_match($compiledRoute->getHostRegex(), $this->context->getHost(), $hostMatches)) {
-            continue;
-        }
+        return preg_match($route->getCompiled()->getRegex(), rawurldecode($requestContext->getParameter('path')));
     }
 }

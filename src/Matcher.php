@@ -43,6 +43,7 @@ class Matcher implements MatcherInterface
      */
     function match($path, RouteCollection $routes)
     {
+        $this->_requestContext->setParameter('path', $path);
         foreach ($routes as $route) 
         {
             if ($this->_validate($route)) {

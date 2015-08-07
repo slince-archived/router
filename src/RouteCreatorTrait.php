@@ -4,9 +4,16 @@ namespace Slince\Router;
 trait RouteCreatorTrait
 {
 
-    function add($path, $parameters)
+    function http($path, $parameters)
     {
         return $this->addRoute($path, $parameters);
+    }
+
+    function https($path, $parameters)
+    {
+        return $this->addRoute($path, $parameters)->setSchemes([
+            'https'
+        ]);
     }
 
     function get($path, $parameters)
@@ -63,7 +70,7 @@ trait RouteCreatorTrait
     {
         return new Route($path, $parameters);
     }
-    
+
     function prefix($prefix, \Closure $callback)
     {
         $routeCollection = RouteCollection::create();

@@ -12,8 +12,7 @@ class HostValidator implements ValidatorInterface
     
     function validate(RouteInterface $route, RequestContext $requestContext)
     {
-        if ($route->getCompiledRoute()->getHostRegex() && !preg_match($compiledRoute->getHostRegex(), $this->context->getHost(), $hostMatches)) {
-            continue;
-        }
+        return ! $route->getCompiledRoute()->getHostRegex() ||
+           preg_match($route->getCompiledRoute()->getHostRegex(), $this->context->getHost());
     }
 }

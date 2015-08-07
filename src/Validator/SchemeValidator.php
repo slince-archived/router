@@ -5,13 +5,13 @@ use Slince\Router\Validator\ValidatorInterface;
 use Slince\Router\RouteInterface;
 use Slince\Router\RequestContext;
 
-class MathodValidator implements ValidatorInterface
+class SchemeValidator implements ValidatorInterface
 {
-    
-    static $id = 'path';
+
+    static $id = 'scheme';
     
     function validate(RouteInterface $route, RequestContext $requestContext)
     {
-        return in_array($requestContext->getMethod(), $route->getMethods());
+        return in_array($requestContext->getScheme(), $route->getSchemes());
     }
 }

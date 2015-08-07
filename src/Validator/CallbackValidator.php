@@ -11,6 +11,7 @@ class CallbackValidator implements ValidatorInterface
     function __construct(\Closure $callback)
     {
         $this->_callback = $callback;
+        self::$id = spl_object_hash($callback);
     }
 
     function validate($route, $requestContext)
