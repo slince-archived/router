@@ -28,6 +28,7 @@ class Router
     function match($path)
     {
         $route = $this->_matcher->match($path, $this->_routeCollection);
+        
     }
 
     function getRoutes()
@@ -38,5 +39,15 @@ class Router
     function getMatcher()
     {
         return $this->_matcher;
+    }
+    
+    /**
+     * 获取路由的参数
+     * 
+     * @return array
+     */
+    function getRouteParams()
+    {
+        return [];
     }
 }

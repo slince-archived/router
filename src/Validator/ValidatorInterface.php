@@ -7,5 +7,7 @@ use Slince\Router\RequestContext;
 interface ValidatorInterface
 {
 
+    static $id = null;
+    
     function validate(RouteInterface $route, RequestContext $requestContext);
 }

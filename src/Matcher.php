@@ -2,6 +2,9 @@
 namespace Slince\Router;
 
 use Slince\Router\Validator\ValidatorInterface;
+use Slince\Router\Validator\PathValidator;
+use Slince\Router\Validator\MathodValidator;
+use Slince\Router\Exception\RouteNotFoundException;
 
 class Matcher implements MatcherInterface
 {
@@ -19,6 +22,13 @@ class Matcher implements MatcherInterface
      * @var ValidatorCollection
      */
     protected $_validators;
+    
+    /**
+     * route验证结果
+     * 
+     * @var array
+     */
+    protected $_report = [];
 
     function __construct(ValidatorCollection $validators = null, RequestContext $requestContext = null)
     {
@@ -39,24 +49,16 @@ class Matcher implements MatcherInterface
                 return $route;
             }
         }
-        return false;
+        if (! empty($this->_report[MathodValidator::$id])) {
+            $methods = [];
+            $methods += array_map(function(RouteInterface $route) {
+                return $route->getMethods();
+            },$this->_report[MathodValidator::$id]);
+            throw new MethodNotAllowedException(array_unique($methods));
+        }
+        throw new RouteNotFoundException();
     }
 
-    /**
-     * 验证route是否通过
-     * 
-     * @param RouteInterface $route
-     */
-    protected function _validate($route)
-    {
-        foreach ($this->_validators as $validator) {
-            if ($validator->validator->validate($route, $this->_requestContext)) {
-                return false;
-            }
-        }
-        return true;
-    }
-    
     function add($validator)
     {
         if ($validator instanceof \Closure) {
@@ -83,5 +85,28 @@ class Matcher implements MatcherInterface
     function getRequestContext()
     {
         return $this->_requestContext;
+    }
+    
+    /**
+     * 验证route是否通过
+     *
+     * @param RouteInterface $route
+     */
+    protected function _validate($route)
+    {
+        foreach ($this->_validators as $validator) {
+            if (! $validator->validator->validate($route, $this->_requestContext)) {
+                $this->_writeReport($validator->id, $route);
+                return false;
+            }
+        }
+        return true;
+    }
+    protected function _writeReport($validatorId, RouteInterface $route)
+    {
+        if (is_null($this->_report[$validatorId])) {
+            $this->_report[$validatorId] = [];
+        }
+        $this->_report[$validatorId][] =$route;
     }
 }
