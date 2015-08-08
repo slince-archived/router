@@ -35,7 +35,12 @@ interface RouteInterface
     function setDomain($domain);
     
     function getDomain();
+
+    function setOptions(array $options);
     
+    function getOptions();
+    
+    function getOption($name, $default);
     /**
      * 获取编译后的route
      * @return Symfony\Component\Routing\CompiledRoute

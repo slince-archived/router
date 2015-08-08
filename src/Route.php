@@ -19,6 +19,8 @@ class Route implements RouteInterface
     protected $_domain;
     
     protected $_compiledRoute;
+    
+    protected $_options;
 
     function getCompiledRoute()
     {
@@ -113,5 +115,20 @@ class Route implements RouteInterface
     function getDomain()
     {
         return $this->_domain;
+    }
+    
+    function setOptions(array $options)
+    {
+        $this->_options = $options;
+    }
+    
+    function getOptions()
+    {
+        return $this->_options;
+    }
+    
+    function getOption($name, $default)
+    {
+        isset($this->_options[$name]) ? $this->_options[$name] : $default;
     }
 }
