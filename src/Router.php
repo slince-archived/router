@@ -38,6 +38,9 @@ class Router
         $this->_matcher = $matcher;
         $this->_matcher->getValidators()->merge(ValidatorFactory::getDefaultValidators());
         $this->_generator = $generator;
+        if (is_null($context)) {
+            $context = RequestContext::create();
+        }
         $this->_context = $context;
         $this->_matcher->setContext($context);
     }

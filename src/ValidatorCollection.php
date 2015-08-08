@@ -28,7 +28,7 @@ class ValidatorCollection implements \Countable, \IteratorAggregate
         $this->_validators[] = $validator;
     }
 
-    function merge($validators)
+    function merge(array $validators)
     {
         $this->_validators += $validators;
     }

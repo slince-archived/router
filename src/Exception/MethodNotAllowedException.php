@@ -6,11 +6,11 @@ class MethodNotAllowedException extends \Exception
     /**
      * @var array
      */
-    protected $allowedMethods = array();
+    protected $_allowedMethods = array();
 
-    public function __construct(array $allowedMethods, $message = null, $code = 0, \Exception $previous = null)
+    function __construct(array $allowedMethods, $message = null, $code = 0, $previous = null)
     {
-        $this->allowedMethods = array_map('strtoupper', $allowedMethods);
+        $this->_allowedMethods = array_map('strtoupper', $allowedMethods);
 
         parent::__construct($message, $code, $previous);
     }
@@ -20,8 +20,8 @@ class MethodNotAllowedException extends \Exception
      *
      * @return array
      */
-    public function getAllowedMethods()
+    function getAllowedMethods()
     {
-        return $this->allowedMethods;
+        return $this->_allowedMethods;
     }
 }

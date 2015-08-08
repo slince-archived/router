@@ -1,7 +1,6 @@
 <?php
 namespace Slince\Router\Validator;
 
-use Slince\Router\Validator\ValidatorInterface;
 use Slince\Router\RouteInterface;
 use Slince\Router\RequestContext;
 

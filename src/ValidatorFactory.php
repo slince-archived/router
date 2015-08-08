@@ -2,6 +2,10 @@
 namespace Slince\Router;
 
 use Slince\Router\Validator\CallbackValidator;
+use Slince\Router\Validator\MethodValidator;
+use Slince\Router\Validator\SchemeValidator;
+use Slince\Router\Validator\HostValidator;
+use Slince\Router\Validator\PathValidator;
 
 class ValidatorFactory
 {
@@ -9,13 +13,13 @@ class ValidatorFactory
     
     static function getDefaultValidators()
     {
-        if (isset(self::$validators)) {
-            return self::$validators;
+        if (empty(self::$validators)) {
+            self::$validators = [
+                new MethodValidator, new SchemeValidator,
+                new HostValidator, new PathValidator,
+            ];
         }
-        return self::$validators = [
-            new MethodValidator, new SchemeValidator,
-            new HostValidator, new UriValidator,
-        ];
+        return self::$validators;
     }
     
     static function createCallbackValidator(\Closure $callback)

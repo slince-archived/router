@@ -1,17 +1,16 @@
 <?php
 namespace Slince\Router\Validator;
 
-use Slince\Router\Validator\ValidatorInterface;
 use Slince\Router\RouteInterface;
 use Slince\Router\RequestContext;
 
-class MathodValidator implements ValidatorInterface
+class MethodValidator implements ValidatorInterface
 {
     
-    static $id = 'path';
+    static $id = 'method';
     
     function validate(RouteInterface $route, RequestContext $context)
     {
-        return in_array($context->getMethod(), $route->getMethods());
+        return ! $route->getMethods() || in_array($context->getMethod(), $route->getMethods());
     }
 }

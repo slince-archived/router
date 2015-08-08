@@ -13,7 +13,7 @@ class RouteCollection implements \Countable, \IteratorAggregate
      * 
      * @var array
      */
-    protected $_subCollections = [];
+    protected $_subRoutes = [];
     
     function __construct(array $routes = [])
     {
@@ -49,8 +49,18 @@ class RouteCollection implements \Countable, \IteratorAggregate
         $this->_routes = $routes;
     }
     
-    function addCollection($prefix, RouteCollection $routeCollection)
+    function addSubRoutes($prefix, RouteCollection $routes)
     {
-        $this->_subCollections[$prefix] = $routeCollection;
+        $this->_subRoutes[$prefix] = $routes;
+    }
+    
+    function hasPrefix($prefix)
+    {
+        return isset($this->_subRoutes[$prefix]);
+    }
+    
+    function getSubRoutes($prefix)
+    {
+        return isset($this->_subRoutes[$prefix]) ? $this->_subRoutes[$prefix] : null;
     }
 }

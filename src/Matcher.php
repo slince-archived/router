@@ -1,9 +1,8 @@
 <?php
 namespace Slince\Router;
 
-use Slince\Router\Validator\ValidatorInterface;
 use Slince\Router\Validator\PathValidator;
-use Slince\Router\Validator\MathodValidator;
+use Slince\Router\Validator\MethodValidator;
 use Slince\Router\Exception\RouteNotFoundException;
 use Slince\Router\Exception\MethodNotAllowedException;
 
@@ -51,12 +50,12 @@ class Matcher implements MatcherInterface
                 return $route;
             }
         }
-        if (! empty($this->_report[MathodValidator::$id])) {
-            $methods = [];
-            $methods += array_map(function(RouteInterface $route) {
+        if (! empty($this->_report[MethodValidator::$id])) {
+            $methods = array_map(function(RouteInterface $route) {
                 return $route->getMethods();
-            },$this->_report[MathodValidator::$id]);
-            throw new MethodNotAllowedException(array_unique($methods));
+            }, $this->_report[MethodValidator::$id]);
+            $methods = array_unique(call_user_func_array('array_merge', $methods));
+            throw new MethodNotAllowedException($methods);
         }
         throw new RouteNotFoundException();
     }
@@ -97,8 +96,11 @@ class Matcher implements MatcherInterface
     protected function _validate($route)
     {
         foreach ($this->_validators as $validator) {
-            if (! $validator->validator->validate($route, $this->_context)) {
-                $this->_writeReport($validator->id, $route);
+            //如果有规则没有被验证通过，则直接终止接下来的验证
+            //并且记录错误
+            if (! $validator->validate($route, $this->_context)) {
+                $route->setReport($validator::$id);
+                $this->_writeReport($validator::$id, $route);
                 return false;
             }
         }
@@ -106,7 +108,7 @@ class Matcher implements MatcherInterface
     }
     protected function _writeReport($validatorId, RouteInterface $route)
     {
-        if (is_null($this->_report[$validatorId])) {
+        if (! isset($this->_report[$validatorId])) {
             $this->_report[$validatorId] = [];
         }
         $this->_report[$validatorId][] =$route;

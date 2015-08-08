@@ -12,6 +12,8 @@ class Route implements RouteInterface
 
     protected $_requirements;
 
+    protected $_options;
+    
     protected $_schemes;
 
     protected $_methods;
@@ -20,11 +22,21 @@ class Route implements RouteInterface
     
     protected $_compiledRoute;
     
-    protected $_options;
-
+    protected $_report;
+    
+    function __construct($path, array $parameters = [], array $requirements = [], array $options = [], $domain = '', array $schemes = [], array $methods = [])
+    {
+        $this->_path = $path;
+        $this->_parameters = $parameters;
+        $this->_requirements = $requirements;
+        $this->_options = $options;
+        $this->_domain = $domain;
+        $this->_schemes = $schemes;
+        $this->_methods = $methods;
+    }
     function getCompiledRoute()
     {
-        if (! is_null($this->_compiledRoute)) {
+        if (is_null($this->_compiledRoute)) {
             $this->recompile();
         }
         return $this->_compiledRoute;
@@ -77,9 +89,19 @@ class Route implements RouteInterface
         $this->_requirements = $requirements;
     }
     
+    function setRequirement($name, $requirement)
+    {
+        $this->_requirements[$name] = $requirement;
+    }
+    
     function getRequirements()
     {
         return $this->_requirements;
+    }
+    
+    function addRequirements(array $requirements)
+    {
+        $this->_requirements += $requirements;
     }
     
     function getRequirement($name, $default)
@@ -130,5 +152,15 @@ class Route implements RouteInterface
     function getOption($name, $default)
     {
         isset($this->_options[$name]) ? $this->_options[$name] : $default;
+    }
+    
+    function setReport($validatorId)
+    {
+        $this->_report = $validatorId;
+    }
+    
+    function getReport()
+    {
+        return $this->_report;
     }
 }

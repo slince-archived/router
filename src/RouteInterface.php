@@ -18,6 +18,8 @@ interface RouteInterface
 
     function setRequirements(array $requirements);
     
+    function setRequirement($name, $requirement);
+    
     function getRequirements();
 
     function addRequirements(array $requirements);
@@ -41,6 +43,7 @@ interface RouteInterface
     function getOptions();
     
     function getOption($name, $default);
+    
     /**
      * 获取编译后的route
      * @return Symfony\Component\Routing\CompiledRoute
@@ -53,4 +56,15 @@ interface RouteInterface
      * @return Symfony\Component\Routing\CompiledRoute
      */
     function recompile();
+    
+    /**
+     * 记录不通过的原因
+     * @param string $validatorId
+     */
+    function setReport($validatorId);
+    
+    /**
+     * 获取不通过的原因
+     */
+    function getReport();
 }
