@@ -10,8 +10,8 @@ class PathValidator implements ValidatorInterface
     
     static $id = 'path';
     
-    function validate(RouteInterface $route, RequestContext $requestContext)
+    function validate(RouteInterface $route, RequestContext $context)
     {
-        return preg_match($route->getCompiled()->getRegex(), rawurldecode($requestContext->getParameter('path')));
+        return preg_match($route->getCompiled()->getRegex(), rawurldecode($context->getParameter('path')));
     }
 }

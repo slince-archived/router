@@ -10,8 +10,8 @@ class SchemeValidator implements ValidatorInterface
 
     static $id = 'scheme';
     
-    function validate(RouteInterface $route, RequestContext $requestContext)
+    function validate(RouteInterface $route, RequestContext $context)
     {
-        return in_array($requestContext->getScheme(), $route->getSchemes());
+        return in_array($context->getScheme(), $route->getSchemes());
     }
 }

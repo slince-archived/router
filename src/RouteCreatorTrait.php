@@ -45,13 +45,6 @@ trait RouteCreatorTrait
         ]);
     }
 
-    function patch($path, $parameters)
-    {
-        return $this->addRoute($path, $parameters)->setMethods([
-            HttpMethod::PATCH
-        ]);
-    }
-
     function delete($path, $parameters)
     {
         return $this->addRoute($path, $parameters)->setMethods([

@@ -5,11 +5,11 @@ class Router
 {
 
     /**
-     * route collection
+     * routes
      *
      * @var RouteCollection
      */
-    protected $_routeCollection;
+    protected $_routes;
 
     /**
      * matcher
@@ -17,23 +17,45 @@ class Router
      * @var MatcherInterface
      */
     protected $_matcher;
+    
+    /**
+     * generator
+     *
+     * @var GeneratorInterface
+     */
+    protected $_generator;
+    
+    /**
+     * request context
+     *
+     * @var RequestContext
+     */
+    protected $_context;
 
-    function __construct(RouteCollection $routeCollection, MatcherInterface $matcher)
+    function __construct(RouteCollection $routes, MatcherInterface $matcher, GeneratorInterface $generator = null, RequestContext $context = null)
     {
-        $this->_routeCollection = $routeCollection;
+        $this->_routes = $routes;
         $this->_matcher = $matcher;
         $this->_matcher->getValidators()->merge(ValidatorFactory::getDefaultValidators());
+        $this->_generator = $generator;
+        $this->_context = $context;
+        $this->_matcher->setContext($context);
     }
 
     function match($path)
     {
-        $route = $this->_matcher->match($path, $this->_routeCollection);
-        
+        $route = $this->_matcher->match($path, $this->_routes);
+        return $route;
+    }
+    
+    function generate($route)
+    {
+        return $this->_generator->generate($route);
     }
 
     function getRoutes()
     {
-        return $this->_routeCollection;
+        return $this->_routes;
     }
 
     function getMatcher()

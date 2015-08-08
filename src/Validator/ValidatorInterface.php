@@ -9,5 +9,5 @@ interface ValidatorInterface
 
     static $id = null;
     
-    function validate(RouteInterface $route, RequestContext $requestContext);
+    function validate(RouteInterface $route, RequestContext $context);
 }

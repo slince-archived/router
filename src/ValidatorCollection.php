@@ -13,6 +13,11 @@ class ValidatorCollection implements \Countable, \IteratorAggregate
         $this->_validators = $validators;
     }
 
+    static function create($validators = [])
+    {
+        return new self($validators);
+    }
+    
     function replace(array $validators = [])
     {
         $this->_validators = $validators;

@@ -5,6 +5,7 @@ use Slince\Router\Validator\ValidatorInterface;
 use Slince\Router\Validator\PathValidator;
 use Slince\Router\Validator\MathodValidator;
 use Slince\Router\Exception\RouteNotFoundException;
+use Slince\Router\Exception\MethodNotAllowedException;
 
 class Matcher implements MatcherInterface
 {
@@ -14,7 +15,7 @@ class Matcher implements MatcherInterface
      * 
      * @var RequestContext
      */
-    protected $_requestContext;
+    protected $_context;
 
     /**
      * validator collection
@@ -30,10 +31,10 @@ class Matcher implements MatcherInterface
      */
     protected $_report = [];
 
-    function __construct(ValidatorCollection $validators = null, RequestContext $requestContext = null)
+    function __construct(RequestContext $context = null)
     {
-        $this->_validators = $validators;
-        $this->_requestContext = $requestContext;
+        $this->_context = $context;
+        $this->_validators = ValidatorCollection::create();
     }
 
     /**
@@ -43,7 +44,7 @@ class Matcher implements MatcherInterface
      */
     function match($path, RouteCollection $routes)
     {
-        $this->_requestContext->setParameter('path', $path);
+        $this->_context->setParameter('path', $path);
         foreach ($routes as $route) 
         {
             if ($this->_validate($route)) {
@@ -78,14 +79,14 @@ class Matcher implements MatcherInterface
         $this->_validators = $validatorCollection;
     }
     
-    function setRequestContext(RequestContext $requestContext)
+    function setContext(RequestContext $context)
     {
-        $this->_requestContext = $requestContext;
+        $this->_context = $context;
     }
     
-    function getRequestContext()
+    function getContext()
     {
-        return $this->_requestContext;
+        return $this->_context;
     }
     
     /**
@@ -96,7 +97,7 @@ class Matcher implements MatcherInterface
     protected function _validate($route)
     {
         foreach ($this->_validators as $validator) {
-            if (! $validator->validator->validate($route, $this->_requestContext)) {
+            if (! $validator->validator->validate($route, $this->_context)) {
                 $this->_writeReport($validator->id, $route);
                 return false;
             }

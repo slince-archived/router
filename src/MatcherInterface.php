@@ -16,16 +16,20 @@ interface MatcherInterface
     function match($path, RouteCollection $routeCollection);
 
     /**
-     * 获取validator collection
-     * 
-     * @return ValidatorCollection
-     */
-    function getValidators();
-
-    /**
      * 设置 validator collection
      *
      * @param ValidatorCollection $validatorCollection            
      */
     function setValidators(ValidatorCollection $validatorCollection);
+    
+    /**
+     * 获取validator collection
+     *
+     * @return ValidatorCollection
+     */
+    function getValidators();
+    
+    function setContext(RequestContext $context);
+    
+    function getContext();
 }
