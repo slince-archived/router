@@ -25,11 +25,6 @@ class RouteMap
     
     function add(RouteLocation $location)
     {
-        $route = $location->getRoute();
-        $routeKey = $route->getOption('name');
-        if (! $routeKey) {
-            $routeKey = spl_object_hash($route);
-        }
         $routeKey = $this->getRouteKey($location->getRoute());
         $this->_locations[$routeKey] = $location;
     }
