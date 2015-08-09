@@ -66,13 +66,13 @@ class Router
         return $this->_matcher;
     }
     
-    /**
-     * 获取路由的参数
-     * 
-     * @return array
-     */
-    function getRouteParams()
+    function setContext(RequestContext $context)
     {
-        return [];
+        $this->_context = $context;
+    }
+    
+    function getContext()
+    {
+        return $this->_context;
     }
 }

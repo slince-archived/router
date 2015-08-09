@@ -47,6 +47,7 @@ class Matcher implements MatcherInterface
         foreach ($routes as $route) 
         {
             if ($this->_validate($route)) {
+                $route->setRouteParameters($this->_handleRouteParameters($route));
                 return $route;
             }
         }
@@ -99,7 +100,6 @@ class Matcher implements MatcherInterface
             //如果有规则没有被验证通过，则直接终止接下来的验证
             //并且记录错误
             if (! $validator->validate($route, $this->_context)) {
-                $route->setReport($validator::$id);
                 $this->_writeReport($validator::$id, $route);
                 return false;
             }
@@ -112,5 +112,12 @@ class Matcher implements MatcherInterface
             $this->_report[$validatorId] = [];
         }
         $this->_report[$validatorId][] =$route;
+    }
+    
+    protected function _handleRouteParameters(RouteInterface $route)
+    {
+        $catchedParameters = call_user_func_array('array_merge', $route->getReport());
+        $variables = $route->getCompiledRoute()->getVariables();
+        return array_intersect_key($catchedParameters, array_flip($variables));
     }
 }

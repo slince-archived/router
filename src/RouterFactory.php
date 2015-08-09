@@ -4,12 +4,13 @@ namespace Slince\Router;
 class RouterFactory
 {
     
-    static function create()
+    static function create(RequestContext $context = null)
     {
         return new Router(
             RouteCollection::create(),
             new Matcher(),
-            new Generator()
+            new Generator(),
+            $context
         );
     }
 }
