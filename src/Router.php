@@ -1,4 +1,8 @@
 <?php
+/**
+ * slince router library
+ * @author Tao <taosikai@yeah.net>
+ */
 namespace Slince\Router;
 
 class Router
@@ -17,14 +21,14 @@ class Router
      * @var MatcherInterface
      */
     protected $_matcher;
-    
+
     /**
      * generator
      *
      * @var GeneratorInterface
      */
     protected $_generator;
-    
+
     /**
      * request context
      *
@@ -45,32 +49,63 @@ class Router
         $this->_matcher->setContext($context);
     }
 
+    /**
+     * 匹配路径寻找路由
+     * 
+     * @param string $path            
+     * @return Route
+     */
     function match($path)
     {
         $route = $this->_matcher->match($path, $this->_routes);
         return $route;
     }
-    
+
+    /**
+     * 生成一个路径
+     * 
+     * @param Route $route            
+     */
     function generate($route)
     {
         return $this->_generator->generate($route);
     }
 
+    /**
+     * 获取routes
+     *
+     * @return \Slince\Router\RouteCollection
+     */
     function getRoutes()
     {
         return $this->_routes;
     }
 
+    /**
+     * 获取matcher
+     * 
+     * @return \Slince\Router\MatcherInterface
+     */
     function getMatcher()
     {
         return $this->_matcher;
     }
-    
+
+    /**
+     * 设置上下文
+     *
+     * @param RequestContext $context            
+     */
     function setContext(RequestContext $context)
     {
         $this->_context = $context;
     }
-    
+
+    /**
+     * 获取上下文
+     *
+     * @return RequestContext $context
+     */
     function getContext()
     {
         return $this->_context;

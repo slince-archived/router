@@ -1,4 +1,8 @@
 <?php
+/**
+ * slince router library
+ * @author Tao <taosikai@yeah.net>
+ */
 namespace Slince\Router;
 
 interface RouteInterface
@@ -163,20 +167,6 @@ interface RouteInterface
     function getOption($name, $default);
 
     /**
-     * 获取编译后的route
-     *
-     * @return Symfony\Component\Routing\CompiledRoute
-     */
-    function getCompiledRoute();
-
-    /**
-     * 重新编译route
-     *
-     * @return Symfony\Component\Routing\CompiledRoute
-     */
-    function recompile();
-
-    /**
      * 记录验证器的验证
      *
      * @param string $validatorId            
@@ -202,4 +192,18 @@ interface RouteInterface
      * @return array
      */
     function getRouteParameters();
+
+    /**
+     * 获取编译后的route
+     *
+     * @return \Symfony\Component\Routing\CompiledRoute
+     */
+    function getCompiledRoute();
+
+    /**
+     * 重新编译route
+     *
+     * @return \Symfony\Component\Routing\CompiledRoute
+     */
+    function recompile();
 }

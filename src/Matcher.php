@@ -1,10 +1,15 @@
 <?php
+/**
+ * slince router library
+ * @author Tao <taosikai@yeah.net>
+ */
 namespace Slince\Router;
 
 use Slince\Router\Validator\PathValidator;
 use Slince\Router\Validator\MethodValidator;
 use Slince\Router\Exception\RouteNotFoundException;
 use Slince\Router\Exception\MethodNotAllowedException;
+use Slince\Router\Validator\ValidatorInterface;
 
 class Matcher implements MatcherInterface
 {
@@ -61,6 +66,11 @@ class Matcher implements MatcherInterface
         throw new RouteNotFoundException();
     }
 
+    /**
+     * 添加一个自定义validator
+     * 
+     * @param ValidatorInterface $validator
+     */
     function add($validator)
     {
         if ($validator instanceof \Closure) {
@@ -69,21 +79,37 @@ class Matcher implements MatcherInterface
         $this->_validators->add($validator);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Slince\Router\MatcherInterface::getValidators()
+     */
     function getValidators()
     {
         return $this->_validators;
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see \Slince\Router\MatcherInterface::setValidators()
+     */
     function setValidators(ValidatorCollection $validatorCollection)
     {
         $this->_validators = $validatorCollection;
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see \Slince\Router\MatcherInterface::setContext()
+     */
     function setContext(RequestContext $context)
     {
         $this->_context = $context;
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see \Slince\Router\MatcherInterface::getContext()
+     */
     function getContext()
     {
         return $this->_context;
@@ -106,6 +132,11 @@ class Matcher implements MatcherInterface
         }
         return true;
     }
+    /**
+     * 
+     * @param unknown $validatorId
+     * @param RouteInterface $route
+     */
     protected function _writeReport($validatorId, RouteInterface $route)
     {
         if (! isset($this->_report[$validatorId])) {
@@ -114,6 +145,12 @@ class Matcher implements MatcherInterface
         $this->_report[$validatorId][] =$route;
     }
     
+    /**
+     * 处理路由参数
+     * 
+     * @param RouteInterface $route
+     * @return array
+     */
     protected function _handleRouteParameters(RouteInterface $route)
     {
         $catchedParameters = call_user_func_array('array_merge', $route->getReport());

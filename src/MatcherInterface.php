@@ -1,4 +1,8 @@
 <?php
+/**
+ * slince router library
+ * @author Tao <taosikai@yeah.net>
+ */
 namespace Slince\Router;
 
 use Slince\Router\Validator\ValidatorInterface;
@@ -21,15 +25,25 @@ interface MatcherInterface
      * @param ValidatorCollection $validatorCollection            
      */
     function setValidators(ValidatorCollection $validatorCollection);
-    
+
     /**
      * 获取validator collection
      *
      * @return ValidatorCollection
      */
     function getValidators();
-    
+
+    /**
+     * 设置上下文
+     * 
+     * @param RequestContext $context            
+     */
     function setContext(RequestContext $context);
-    
+
+    /**
+     * 获取上下文
+     * 
+     * @return RequestContext $context
+     */
     function getContext();
 }

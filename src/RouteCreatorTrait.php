@@ -1,14 +1,30 @@
 <?php
+/**
+ * slince router library
+ * @author Tao <taosikai@yeah.net>
+ */
 namespace Slince\Router;
 
 trait RouteCreatorTrait
 {
 
+    /**
+     * 创建一个普通路由，addRoute别名
+     *
+     * @param string $path            
+     * @param array $parameters            
+     */
     function http($path, $parameters)
     {
         return $this->addRoute($path, $parameters);
     }
 
+    /**
+     * 创建一个https路由
+     *
+     * @param string $path            
+     * @param array $parameters            
+     */
     function https($path, $parameters)
     {
         return $this->addRoute($path, $parameters)->setSchemes([
@@ -16,6 +32,12 @@ trait RouteCreatorTrait
         ]);
     }
 
+    /**
+     * 创建一个get路由
+     *
+     * @param string $path            
+     * @param array $parameters            
+     */
     function get($path, $parameters)
     {
         return $this->addRoute($path, $parameters)->setMethods([
@@ -24,6 +46,12 @@ trait RouteCreatorTrait
         ]);
     }
 
+    /**
+     * 创建一个post路由
+     *
+     * @param string $path            
+     * @param array $parameters            
+     */
     function post($path, $parameters)
     {
         return $this->addRoute($path, $parameters)->setMethods([
@@ -31,6 +59,12 @@ trait RouteCreatorTrait
         ]);
     }
 
+    /**
+     * 创建一个put路由
+     *
+     * @param string $path            
+     * @param array $parameters            
+     */
     function put($path, $parameters)
     {
         return $this->addRoute($path, $parameters)->setMethods([
@@ -38,6 +72,12 @@ trait RouteCreatorTrait
         ]);
     }
 
+    /**
+     * 创建一个patch路由
+     *
+     * @param string $path            
+     * @param array $parameters            
+     */
     function patch($path, $parameters)
     {
         return $this->addRoute($path, $parameters)->setMethods([
@@ -45,6 +85,12 @@ trait RouteCreatorTrait
         ]);
     }
 
+    /**
+     * 创建一个delete路由
+     *
+     * @param string $path            
+     * @param array $parameters            
+     */
     function delete($path, $parameters)
     {
         return $this->addRoute($path, $parameters)->setMethods([
@@ -52,6 +98,12 @@ trait RouteCreatorTrait
         ]);
     }
 
+    /**
+     * 创建并添加一个路由
+     *
+     * @param string $path            
+     * @param array $parameters            
+     */
     function addRoute($path, $parameters)
     {
         $route = $this->newRoute($path, $parameters);
@@ -59,15 +111,28 @@ trait RouteCreatorTrait
         return $route;
     }
 
+    /**
+     * 创建一个路由
+     *
+     * @param string $path            
+     * @param array $parameters            
+     * @return Route
+     */
     function newRoute($path, $parameters)
     {
         return new Route($path, $parameters);
     }
 
+    /**
+     * 创建一个前缀
+     *
+     * @param unknown $prefix            
+     * @param \Closure $callback            
+     */
     function prefix($prefix, \Closure $callback)
     {
-        $routeCollection = RouteCollection::create();
-        call_user_func($callback, $routeCollection);
-        $this->addCollection($prefix, $routeCollection);
+        $routes = RouteCollection::create();
+        call_user_func($callback, $routes);
+        $this->addSubRoutes($prefix, $routes);
     }
 }
