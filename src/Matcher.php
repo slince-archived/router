@@ -48,7 +48,14 @@ class Matcher implements MatcherInterface
      */
     function match($path, RouteCollection $routes)
     {
+        $path = '/' . ltrim($path, '/');
         $this->_context->setParameter('path', $path);
+        //如果匹配子集前缀则进入子集匹配
+        $prefix = strtok($path , '/'); 
+        if ($routes->hasPrefix($prefix)) {
+            return $this->match(substr($path, strlen($prefix) + 1), $routes->getSubRoutes($prefix));
+        }
+        //查找符合条件的route
         foreach ($routes as $route) 
         {
             if ($this->_validate($route)) {
@@ -56,6 +63,8 @@ class Matcher implements MatcherInterface
                 return $route;
             }
         }
+        //未找到route时，检测是否有被MethodValidator拦截的route，
+        //有则抛MethodNotAllowedException,无抛RouteNotFoundException
         if (! empty($this->_report[MethodValidator::$id])) {
             $methods = array_map(function(RouteInterface $route) {
                 return $route->getMethods();
@@ -124,7 +133,7 @@ class Matcher implements MatcherInterface
     {
         foreach ($this->_validators as $validator) {
             //如果有规则没有被验证通过，则直接终止接下来的验证
-            //并且记录错误
+            //并且记录拦截情况
             if (! $validator->validate($route, $this->_context)) {
                 $this->_writeReport($validator::$id, $route);
                 return false;

@@ -30,10 +30,10 @@ class ValidatorFactory
     {
         if (empty(self::$validators)) {
             self::$validators = [
-                new MethodValidator(),
                 new SchemeValidator(),
                 new HostValidator(),
-                new PathValidator()
+                new PathValidator(),
+                new MethodValidator(),
             ];
         }
         return self::$validators;

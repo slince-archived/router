@@ -150,6 +150,15 @@ interface RouteInterface
      * @return RouteInterface
      */
     function setOptions(array $options);
+    
+    /**
+     * 设置option
+     *
+     * @param string $name
+     * @param mixed $option            
+     * @return RouteInterface
+     */
+    function setOption($name, $option);
 
     /**
      * 获取options

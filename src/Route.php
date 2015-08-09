@@ -33,28 +33,28 @@ class Route implements RouteInterface
 
     /**
      * options
-     * 
+     *
      * @var array
      */
     protected $_options;
 
     /**
      * schemes
-     * 
+     *
      * @var array
      */
     protected $_schemes;
 
     /**
      * methods
-     * 
+     *
      * @var array
      */
     protected $_methods;
 
     /**
      * domain
-     * 
+     *
      * @var string
      */
     protected $_domain;
@@ -75,14 +75,14 @@ class Route implements RouteInterface
 
     /**
      * 验证之后的路由参数
-     * 
+     *
      * @var array
      */
     protected $_routeParameters;
 
     function __construct($path, array $parameters = [], array $requirements = [], array $options = [], $domain = '', array $schemes = [], array $methods = [])
     {
-        $this->_path = $path;
+        $this->setPath($path);
         $this->_parameters = $parameters;
         $this->_requirements = $requirements;
         $this->_options = $options;
@@ -93,18 +93,18 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::setPath()
      */
     function setPath($path)
     {
-        $this->_path = $path;
+        $this->_path = '/' . ltrim(trim($path), '/');
         return $this;
     }
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::getPath()
      */
     function getPath()
@@ -114,7 +114,7 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::setParameter()
      */
     function setParameter($name, $parameter)
@@ -125,7 +125,7 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::getParameter()
      */
     function getParameter($name, $default = null)
@@ -135,7 +135,7 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::setParameters()
      */
     function setParameters(array $parameters)
@@ -146,7 +146,7 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::getParameters()
      */
     function getParameters()
@@ -156,7 +156,7 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::setRequirements()
      */
     function setRequirements(array $requirements)
@@ -167,7 +167,7 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::setRequirement()
      */
     function setRequirement($name, $requirement)
@@ -178,7 +178,7 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::getRequirements()
      */
     function getRequirements()
@@ -188,7 +188,7 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::addRequirements()
      */
     function addRequirements(array $requirements)
@@ -199,7 +199,7 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::getRequirement()
      */
     function getRequirement($name, $default = null)
@@ -209,7 +209,7 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::setSchemes()
      */
     function setSchemes(array $schemes)
@@ -220,7 +220,7 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::getSchemes()
      */
     function getSchemes()
@@ -230,7 +230,7 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::setMethods()
      */
     function setMethods(array $methods)
@@ -241,7 +241,7 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::getMethods()
      */
     function getMethods()
@@ -251,7 +251,7 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::setDomain()
      */
     function setDomain($domain)
@@ -262,7 +262,7 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::getDomain()
      */
     function getDomain()
@@ -272,7 +272,7 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::setOptions()
      */
     function setOptions(array $options)
@@ -284,6 +284,17 @@ class Route implements RouteInterface
     /**
      * (non-PHPdoc)
      * 
+     * @see \Slince\Router\RouteInterface::setOption()
+     */
+    function setOption($name, $option)
+    {
+        $this->_options[$name] = $option;
+        return $this;
+    }
+
+    /**
+     * (non-PHPdoc)
+     *
      * @see \Slince\Router\RouteInterface::getOptions()
      */
     function getOptions()
@@ -293,7 +304,7 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::getOption()
      */
     function getOption($name, $default)
@@ -303,7 +314,7 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::setReport()
      */
     function setReport($validatorId, $report)
@@ -314,7 +325,7 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::getReport()
      */
     function getReport($validatorId = null)
@@ -328,7 +339,7 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::setRouteParameters()
      */
     function setRouteParameters(array $parameters)
@@ -338,7 +349,7 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::getRouteParameters()
      */
     function getRouteParameters()
@@ -348,7 +359,7 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::getCompiledRoute()
      */
     function getCompiledRoute()
@@ -361,7 +372,7 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::recompile()
      */
     function recompile()

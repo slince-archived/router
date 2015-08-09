@@ -14,9 +14,9 @@ trait RouteCreatorTrait
      * @param string $path            
      * @param array $parameters            
      */
-    function http($path, $parameters)
+    function http($path, $parameters, $options = [])
     {
-        return $this->addRoute($path, $parameters);
+        return $this->addRoute($path, $parameters, $options);
     }
 
     /**
@@ -25,9 +25,9 @@ trait RouteCreatorTrait
      * @param string $path            
      * @param array $parameters            
      */
-    function https($path, $parameters)
+    function https($path, $parameters, $options = [])
     {
-        return $this->addRoute($path, $parameters)->setSchemes([
+        return $this->addRoute($path, $parameters, $options)->setSchemes([
             'https'
         ]);
     }
@@ -38,9 +38,9 @@ trait RouteCreatorTrait
      * @param string $path            
      * @param array $parameters            
      */
-    function get($path, $parameters)
+    function get($path, $parameters, $options = [])
     {
-        return $this->addRoute($path, $parameters)->setMethods([
+        return $this->addRoute($path, $parameters, $options)->setMethods([
             HttpMethod::GET,
             HttpMethod::HEAD
         ]);
@@ -52,9 +52,9 @@ trait RouteCreatorTrait
      * @param string $path            
      * @param array $parameters            
      */
-    function post($path, $parameters)
+    function post($path, $parameters, $options = [])
     {
-        return $this->addRoute($path, $parameters)->setMethods([
+        return $this->addRoute($path, $parameters, $options)->setMethods([
             HttpMethod::POST
         ]);
     }
@@ -65,9 +65,9 @@ trait RouteCreatorTrait
      * @param string $path            
      * @param array $parameters            
      */
-    function put($path, $parameters)
+    function put($path, $parameters, $options = [])
     {
-        return $this->addRoute($path, $parameters)->setMethods([
+        return $this->addRoute($path, $parameters, $options)->setMethods([
             HttpMethod::PUT
         ]);
     }
@@ -78,9 +78,9 @@ trait RouteCreatorTrait
      * @param string $path            
      * @param array $parameters            
      */
-    function patch($path, $parameters)
+    function patch($path, $parameters, $options = [])
     {
-        return $this->addRoute($path, $parameters)->setMethods([
+        return $this->addRoute($path, $parameters, $options)->setMethods([
             HttpMethod::PATCH
         ]);
     }
@@ -91,9 +91,9 @@ trait RouteCreatorTrait
      * @param string $path            
      * @param array $parameters            
      */
-    function delete($path, $parameters)
+    function delete($path, $parameters, $options = [])
     {
-        return $this->addRoute($path, $parameters)->setMethods([
+        return $this->addRoute($path, $parameters, $options)->setMethods([
             HttpMethod::DELETE
         ]);
     }
@@ -104,10 +104,15 @@ trait RouteCreatorTrait
      * @param string $path            
      * @param array $parameters            
      */
-    function addRoute($path, $parameters)
+    function addRoute($path, $parameters, $options = [])
     {
         $route = $this->newRoute($path, $parameters);
-        $this->add($route);
+        if (isset($options['as'])) {
+            $route->setOption('name', $options['as']);
+            $this->getRoutes()->addNamedRoute($options['as'], $route);
+        } else {
+            $this->getRoutes()->add($route);
+        }
         return $route;
     }
 
@@ -118,21 +123,28 @@ trait RouteCreatorTrait
      * @param array $parameters            
      * @return Route
      */
-    function newRoute($path, $parameters)
+    function newRoute($path, $parameters, $options = [])
     {
-        return new Route($path, $parameters);
+        return new Route($path, $parameters, $options = []);
     }
 
     /**
      * 创建一个前缀
      *
-     * @param unknown $prefix            
+     * @param string $prefix            
      * @param \Closure $callback            
      */
     function prefix($prefix, \Closure $callback)
     {
         $routes = RouteCollection::create();
         call_user_func($callback, $routes);
-        $this->addSubRoutes($prefix, $routes);
+        $this->getRoutes()->addSubRoutes($prefix, $routes);
     }
+    
+    /**
+     * 返回适配的routecollection
+     * 
+     * @return RouteCollection
+     */
+    abstract function getRoutes();
 }
