@@ -52,8 +52,8 @@ class Matcher implements MatcherInterface
         $this->_context->setParameter('path', $path);
         //如果匹配子集前缀则进入子集匹配
         $prefix = strtok($path , '/'); 
-        if ($routes->hasPrefix($prefix)) {
-            return $this->match(substr($path, strlen($prefix) + 1), $routes->getSubCollection($prefix));
+        if ($routes->hasCollection($prefix)) {
+            return $this->match(substr($path, strlen($prefix) + 1), $routes->getCollection($prefix));
         }
         //查找符合条件的route
         foreach ($routes as $route) 

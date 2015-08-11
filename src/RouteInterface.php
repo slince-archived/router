@@ -214,5 +214,5 @@ interface RouteInterface
      *
      * @return \Symfony\Component\Routing\CompiledRoute
      */
-    function recompile();
+    function compile();
 }

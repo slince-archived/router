@@ -365,7 +365,7 @@ class Route implements RouteInterface
     function getCompiledRoute()
     {
         if (is_null($this->_compiledRoute)) {
-            $this->recompile();
+            $this->compile();
         }
         return $this->_compiledRoute;
     }
@@ -375,8 +375,16 @@ class Route implements RouteInterface
      *
      * @see \Slince\Router\RouteInterface::recompile()
      */
-    function recompile()
+    function compile()
     {
-        return $this->_compiledRoute = (new SymfonyRoute($this->_path, $this->_parameters, $this->_requirements, $this->_options, $this->_domain, $this->_schemes, $this->_methods))->compile();
+        return $this->_compiledRoute = (new SymfonyRoute(
+            $this->_path, 
+            $this->_parameters, 
+            $this->_requirements, 
+            [], 
+            $this->_domain, 
+            $this->_schemes, 
+            $this->_methods)
+        )->compile();
     }
 }

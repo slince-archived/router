@@ -138,7 +138,7 @@ trait RouteCreatorTrait
     {
         $routes = RouteCollection::create();
         call_user_func($callback, $routes);
-        $this->getRouteCollection()->addSubCollection($prefix, $routes);
+        $this->getRouteCollection()->addCollection($prefix, $routes);
     }
     
     /**

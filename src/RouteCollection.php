@@ -18,11 +18,17 @@ class RouteCollection implements \Countable, \IteratorAggregate
     protected $_routes = [];
 
     /**
+     * 带name的集合
+     * 
+     * @var array
+     */
+    protected $_names = [];
+    /**
      * 子集
      *
      * @var array
      */
-    protected $_subCollections = [];
+    protected $_collections = [];
 
     /**
      * 父级routes
@@ -86,6 +92,15 @@ class RouteCollection implements \Countable, \IteratorAggregate
     }
 
     /**
+     * 获取集合下所有的route
+     * 
+     * @return array
+     */
+    function getAll()
+    {
+        return $this->_routes;
+    }
+    /**
      * 是否有命名route
      *
      * @param string $name
@@ -113,11 +128,11 @@ class RouteCollection implements \Countable, \IteratorAggregate
      * @param string $prefix            
      * @param RouteCollection $routes            
      */
-    function addSubCollection($prefix, RouteCollection $collection)
+    function addCollection($prefix, RouteCollection $collection)
     {
         $routes->setParentCollecton($this);
         $routes->setTopCollection($this->getTopRoutes());
-        $this->_subCollections[$prefix] = $collection;
+        $this->_collections[$prefix] = $collection;
     }
 
     /**
@@ -126,9 +141,9 @@ class RouteCollection implements \Countable, \IteratorAggregate
      * @param string $prefix            
      * @return RouteCollection
      */
-    function getSubCollection($prefix)
+    function getCollection($prefix)
     {
-        return isset($this->_subCollections[$prefix]) ? $this->_subCollections[$prefix] : null;
+        return isset($this->_collections[$prefix]) ? $this->_collections[$prefix] : null;
     }
 
     /**
@@ -136,9 +151,9 @@ class RouteCollection implements \Countable, \IteratorAggregate
      *
      * @param string $prefix
      */
-    function hasSubCollection($prefix)
+    function hasCollection($prefix)
     {
-        return isset($this->_subCollections[$prefix]);
+        return isset($this->_collections[$prefix]);
     }
     
     /**
