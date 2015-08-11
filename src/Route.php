@@ -98,7 +98,7 @@ class Route implements RouteInterface
      */
     function setPath($path)
     {
-        $this->_path = '/' . ltrim(trim($path), '/');
+        $this->_path = '/' . trim(trim($path), '/');
         return $this;
     }
 
@@ -312,6 +312,18 @@ class Route implements RouteInterface
         isset($this->_options[$name]) ? $this->_options[$name] : $default;
     }
 
+    /**
+     * 给路径设置前缀
+     * 
+     * @param string $prefix
+     * @return \Slince\Router\Route
+     */
+    function setPreifx($prefix)
+    {
+        $path = '/' . trim($prefix, '/') . $this->_path;
+        $this->_path = $path;
+        return $this;
+    }
     /**
      * (non-PHPdoc)
      *

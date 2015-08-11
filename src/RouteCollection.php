@@ -30,20 +30,6 @@ class RouteCollection implements \Countable, \IteratorAggregate
      */
     protected $_collections = [];
 
-    /**
-     * 父级routes
-     *
-     * @var RouteCollection
-     */
-    protected $_parentCollection;
-    
-    /**
-     * 顶级routes
-     *
-     * @var RouteCollection
-     */
-    protected $_topCollection;
-
     function __construct(array $routes = [])
     {
         $this->_routes = $routes;
@@ -78,7 +64,8 @@ class RouteCollection implements \Countable, \IteratorAggregate
      */
     function addNamedRoute($name, RouteInterface $route)
     {
-        $this->_routes[$name] = $route;
+        $this->_names[$name] = $route;
+        $this->_routes[] = $route;
     }
 
     /**
@@ -154,53 +141,6 @@ class RouteCollection implements \Countable, \IteratorAggregate
     function hasCollection($prefix)
     {
         return isset($this->_collections[$prefix]);
-    }
-    
-    /**
-     * 设置父级routes
-     *
-     * @return RouteCollection
-     */
-    function setParentCollecton(RouteCollection $collection)
-    {
-        $this->_parentCollection = $collection;
-        return $this;
-    }
-    /**
-     * 获取父级routes
-     *
-     * @return RouteCollection
-     */
-    function getParentCollecton()
-    {
-        if (is_null($this->_parentCollection)) {
-            $this->_parentCollection = $this;
-        }
-        return $this->_parentCollection;
-    }
-
-    /**
-     * 设置顶级routes
-     *
-     * @return RouteCollection
-     */
-    function setTopCollection(RouteCollection $collection)
-    {
-        $this->_topCollection = $collection;
-        return $this;
-    }
-    
-    /**
-     * 获取顶级routes
-     * 
-     * @return RouteCollection
-     */
-    function getTopCollection()
-    {
-        if (is_null($this->_topCollection)) {
-            $this->_topCollection = $this;
-        }
-        return $this->_topCollection;
     }
     
     /**
