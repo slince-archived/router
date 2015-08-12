@@ -9,6 +9,13 @@ class RouteCollection implements \Countable, \IteratorAggregate
 {
     
     use RouteCreatorTrait;
+    
+    /**
+     * 路由集合的前缀
+     * 
+     * @var string
+     */
+    protected $_prefix = '';
 
     /**
      * route集合
@@ -47,6 +54,7 @@ class RouteCollection implements \Countable, \IteratorAggregate
      */
     function add(RouteInterface $route)
     {
+        $route->setPreifx($this->_prefix);
         $this->_routes[] = $route;
         RouteMap::newInstance()->push($route, $this);
     }
@@ -103,6 +111,16 @@ class RouteCollection implements \Countable, \IteratorAggregate
     function hasCollection($prefix)
     {
         return isset($this->_collections[$prefix]);
+    }
+    
+    function setPreifx($prefix)
+    {
+        $this->_prefix = trim($prefix, '/');
+    }
+    
+    function getPreifx()
+    {
+        return $this->_prefix;
     }
     
     /**

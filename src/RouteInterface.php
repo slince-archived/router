@@ -25,18 +25,6 @@ interface RouteInterface
     function getPath();
 
     /**
-     * 设置路由响应操作
-     * 
-     * @param mixed $action
-     */
-    function setAction($action);
-    
-    /**
-     * 获取路由响应
-     */
-    function getAction();
-    
-    /**
      * 设置parameter
      *
      * @param string $name            
@@ -187,6 +175,12 @@ interface RouteInterface
      */
     function getOption($name, $default);
 
+    /**
+     * 设置路由前缀
+     * 
+     * @param string $prefix
+     */
+    function setPreifx($prefix);
     /**
      * 记录验证器的验证
      *

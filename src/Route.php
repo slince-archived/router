@@ -11,19 +11,19 @@ class Route implements RouteInterface
 {
 
     /**
+     * 路由前缀
+     * 
+     * @var string
+     */
+    protected $_prefix = '';
+    
+    /**
      * path
      *
      * @var string
      */
     protected $_path;
     
-    /**
-     * action
-     *
-     * @var string
-     */
-    protected $_action;
-
     /**
      * 默认参数
      *
@@ -119,12 +119,6 @@ class Route implements RouteInterface
         return $this->_path;
     }
 
-    function setAction($action)
-    {
-        if (is_callable($action)) {
-            
-        }
-    }
     /**
      * (non-PHPdoc)
      *
