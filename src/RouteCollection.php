@@ -18,12 +18,6 @@ class RouteCollection implements \Countable, \IteratorAggregate
     protected $_routes = [];
 
     /**
-     * 带name的集合
-     * 
-     * @var array
-     */
-    protected $_names = [];
-    /**
      * 子集
      *
      * @var array
@@ -54,18 +48,7 @@ class RouteCollection implements \Countable, \IteratorAggregate
     function add(RouteInterface $route)
     {
         $this->_routes[] = $route;
-    }
-
-    /**
-     * 添加命名路由
-     *
-     * @param string $name            
-     * @param RouteInterface $route            
-     */
-    function addNamedRoute($name, RouteInterface $route)
-    {
-        $this->_names[$name] = $route;
-        $this->_routes[] = $route;
+        RouteMap::newInstance()->push($route, $this);
     }
 
     /**
@@ -86,27 +69,6 @@ class RouteCollection implements \Countable, \IteratorAggregate
     function getAll()
     {
         return $this->_routes;
-    }
-    /**
-     * 是否有命名route
-     *
-     * @param string $name
-     */
-    function hasNamedRoute($name)
-    {
-        return isset($this->_routes[$name]);
-    }
-    
-    /**
-     * 根据命名找到route
-     *
-     * @param string $name
-     * @param RouteInterface $route
-     * @return RouteInterface|null
-     */
-    function getRouteByName($name)
-    {
-        return isset($this->_routes[$name]) ? $this->_routes[$name] : null;
     }
     
     /**

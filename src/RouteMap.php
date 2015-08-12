@@ -14,13 +14,23 @@ class RouteMap
      */
     protected $_locations;
     
+    protected static $_instance;
+    
     function __construct(array $locations = [])
     {
         $this->_locations = $locations;
     }
-    static function create(array $locations = [])
+    static function newInstance()
     {
-        return new static($locations);
+        if (! self::$_instance instanceof static) {
+            self::$_instance = new static();
+        }
+        return self::$_instance;
+    }
+    
+    function push(RouteInterface $route, RouteCollection $routes)
+    {
+        $this->add(new RouteLocation($route, $routes));
     }
     
     function add(RouteLocation $location)
