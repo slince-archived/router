@@ -16,6 +16,13 @@ class Route implements RouteInterface
      * @var string
      */
     protected $_path;
+    
+    /**
+     * action
+     *
+     * @var string
+     */
+    protected $_action;
 
     /**
      * 默认参数
@@ -112,6 +119,12 @@ class Route implements RouteInterface
         return $this->_path;
     }
 
+    function setAction($action)
+    {
+        if (is_callable($action)) {
+            
+        }
+    }
     /**
      * (non-PHPdoc)
      *
