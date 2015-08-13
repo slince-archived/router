@@ -150,11 +150,11 @@ interface RouteInterface
      * @return RouteInterface
      */
     function setOptions(array $options);
-    
+
     /**
      * 设置option
      *
-     * @param string $name
+     * @param string $name            
      * @param mixed $option            
      * @return RouteInterface
      */
@@ -176,11 +176,20 @@ interface RouteInterface
     function getOption($name, $default);
 
     /**
+     * 是否存在option
+     *
+     * @param string $name            
+     * @return boolean
+     */
+    function hasOption($name);
+
+    /**
      * 设置路由前缀
-     * 
-     * @param string $prefix
+     *
+     * @param string $prefix            
      */
     function setPreifx($prefix);
+
     /**
      * 记录验证器的验证
      *

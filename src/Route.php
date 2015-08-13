@@ -12,18 +12,18 @@ class Route implements RouteInterface
 
     /**
      * 路由前缀
-     * 
+     *
      * @var string
      */
     protected $_prefix = '';
-    
+
     /**
      * path
      *
      * @var string
      */
     protected $_path;
-    
+
     /**
      * 默认参数
      *
@@ -290,7 +290,7 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::setOption()
      */
     function setOption($name, $option)
@@ -316,13 +316,23 @@ class Route implements RouteInterface
      */
     function getOption($name, $default)
     {
-        isset($this->_options[$name]) ? $this->_options[$name] : $default;
+        return isset($this->_options[$name]) ? $this->_options[$name] : $default;
+    }
+
+    /**
+     * (non-PHPdoc)
+     * 
+     * @see \Slince\Router\RouteInterface::hasOption()
+     */
+    function hasOption($name)
+    {
+        return isset($this->_options[$name]);
     }
 
     /**
      * 给路径设置前缀
-     * 
-     * @param string $prefix
+     *
+     * @param string $prefix            
      * @return \Slince\Router\Route
      */
     function setPreifx($prefix)
@@ -331,6 +341,7 @@ class Route implements RouteInterface
         $this->_path = $path;
         return $this;
     }
+
     /**
      * (non-PHPdoc)
      *
@@ -396,14 +407,6 @@ class Route implements RouteInterface
      */
     function compile()
     {
-        return $this->_compiledRoute = (new SymfonyRoute(
-            $this->_path, 
-            $this->_parameters, 
-            $this->_requirements, 
-            [], 
-            $this->_domain, 
-            $this->_schemes, 
-            $this->_methods)
-        )->compile();
+        return $this->_compiledRoute = (new SymfonyRoute($this->_path, $this->_parameters, $this->_requirements, [], $this->_domain, $this->_schemes, $this->_methods))->compile();
     }
 }
