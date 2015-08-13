@@ -87,9 +87,10 @@ class Route implements RouteInterface
      */
     protected $_routeParameters;
 
-    function __construct($path, array $parameters = [], array $requirements = [], array $options = [], $domain = '', array $schemes = [], array $methods = [])
+    function __construct($path, $parameters, array $requirements = [], array $options = [], $domain = '', array $schemes = [], array $methods = [])
     {
         $this->setPath($path);
+        $parameters = $this->_parseParameters($parameters);
         $this->_parameters = $parameters;
         $this->_requirements = $requirements;
         $this->_options = $options;
@@ -138,6 +139,16 @@ class Route implements RouteInterface
     function getParameter($name, $default = null)
     {
         return isset($this->_parameters[$name]) ? $this->_parameters[$name] : $default;
+    }
+    
+    /**
+     * (non-PHPdoc)
+     *
+     * @see \Slince\Router\RouteInterface::hasParameter()
+     */
+    function hasParameter($name)
+    {
+        return isset($this->_parameters[$name]);
     }
 
     /**
@@ -399,7 +410,7 @@ class Route implements RouteInterface
         }
         return $this->_compiledRoute;
     }
-
+    
     /**
      * (non-PHPdoc)
      *
@@ -409,4 +420,14 @@ class Route implements RouteInterface
     {
         return $this->_compiledRoute = (new SymfonyRoute($this->_path, $this->_parameters, $this->_requirements, [], $this->_domain, $this->_schemes, $this->_methods))->compile();
     }
+    
+    protected function _parseParameters($parameters)
+    {
+        if (is_callable($parameters) || (is_string($parameters) && strpos($parameters, '@'))) {
+            return ['action' => $parameters];
+        }
+        if (is_array($parameters) && isset($parameters['action'])) {
+            return $parameters;
+        }
+    } 
 }

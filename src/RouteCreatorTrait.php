@@ -14,9 +14,9 @@ trait RouteCreatorTrait
      * @param string $path            
      * @param array $parameters            
      */
-    function http($path, $parameters, $options = [])
+    function http($path, $parameters)
     {
-        return $this->addRoute($path, $parameters, $options);
+        return $this->addRoute($path, $parameters);
     }
 
     /**
@@ -25,9 +25,9 @@ trait RouteCreatorTrait
      * @param string $path            
      * @param array $parameters            
      */
-    function https($path, $parameters, $options = [])
+    function https($path, $parameters)
     {
-        return $this->addRoute($path, $parameters, $options)->setSchemes([
+        return $this->addRoute($path, $parameters)->setSchemes([
             'https'
         ]);
     }
@@ -38,9 +38,9 @@ trait RouteCreatorTrait
      * @param string $path            
      * @param array $parameters            
      */
-    function get($path, $parameters, $options = [])
+    function get($path, $parameters)
     {
-        return $this->addRoute($path, $parameters, $options)->setMethods([
+        return $this->addRoute($path, $parameters)->setMethods([
             HttpMethod::GET,
             HttpMethod::HEAD
         ]);
@@ -52,9 +52,9 @@ trait RouteCreatorTrait
      * @param string $path            
      * @param array $parameters            
      */
-    function post($path, $parameters, $options = [])
+    function post($path, $parameters)
     {
-        return $this->addRoute($path, $parameters, $options)->setMethods([
+        return $this->addRoute($path, $parameters)->setMethods([
             HttpMethod::POST
         ]);
     }
@@ -65,9 +65,9 @@ trait RouteCreatorTrait
      * @param string $path            
      * @param array $parameters            
      */
-    function put($path, $parameters, $options = [])
+    function put($path, $parameters)
     {
-        return $this->addRoute($path, $parameters, $options)->setMethods([
+        return $this->addRoute($path, $parameters)->setMethods([
             HttpMethod::PUT
         ]);
     }
@@ -78,9 +78,9 @@ trait RouteCreatorTrait
      * @param string $path            
      * @param array $parameters            
      */
-    function patch($path, $parameters, $options = [])
+    function patch($path, $parameters)
     {
-        return $this->addRoute($path, $parameters, $options)->setMethods([
+        return $this->addRoute($path, $parameters)->setMethods([
             HttpMethod::PATCH
         ]);
     }
@@ -91,9 +91,9 @@ trait RouteCreatorTrait
      * @param string $path            
      * @param array $parameters            
      */
-    function delete($path, $parameters, $options = [])
+    function delete($path, $parameters)
     {
-        return $this->addRoute($path, $parameters, $options)->setMethods([
+        return $this->addRoute($path, $parameters)->setMethods([
             HttpMethod::DELETE
         ]);
     }
@@ -104,14 +104,14 @@ trait RouteCreatorTrait
      * @param string $path            
      * @param array $parameters            
      */
-    function addRoute($path, $parameters, $options = [])
+    function addRoute($path, $parameters)
     {
         $route = $this->newRoute($path, $parameters);
-        if (isset($options['as'])) {
-            $route->setOption('name', $options['as']);
-            $this->getRoutes()->addNamedRoute($options['as'], $route);
+        if (isset($parameters['as'])) {
+            $route->setOption('name', $parameters['as']);
+            $this->getRouteCollection()->addNamedRoute($parameters['as'], $route);
         } else {
-            $this->getRoutes()->add($route);
+            $this->getRouteCollection()->add($route);
         }
         return $route;
     }
@@ -123,9 +123,9 @@ trait RouteCreatorTrait
      * @param array $parameters            
      * @return Route
      */
-    function newRoute($path, $parameters, $options = [])
+    function newRoute($path, $parameters)
     {
-        return new Route($path, $parameters, $options = []);
+        return new Route($path, $parameters);
     }
 
     /**

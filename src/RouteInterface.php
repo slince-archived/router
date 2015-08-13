@@ -43,6 +43,14 @@ interface RouteInterface
     function getParameter($name, $default = null);
 
     /**
+     * 是否存在参数
+     * 
+     * @param string $name
+     * @return mixed
+     */
+    function hasParameter($name);
+    
+    /**
      * 设置parameters
      *
      * @param array $parameters            

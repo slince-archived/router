@@ -14,10 +14,6 @@ class RouteStore
     
     protected $_actions;
     
-    function __construct(array $locations = [])
-    {
-        $this->_locations = $locations;
-    }
     static function newInstance()
     {
         if (! self::$_instance instanceof static) {
@@ -28,15 +24,25 @@ class RouteStore
     
     function add(RouteInterface $route)
     {
-        if ($route->hasOption('name')) {
-            $routeKey = $route->getOption('name');
+        if ($route->hasParameter('name')) {
+            $routeKey = $route->getParameter('name');
             $this->_names[$routeKey] = $route;
         }
         
-        if ($route->hasOption('action')) {
-            $action = $route->getOption('action');
+        if ($route->hasParameter('action') && is_string($var)) {
+            $action = $route->getParameter('action');
             $routeKey = $route->getPrefix() . '/' . $action;
             $this->_actions[$routeKey] = $route;
         }
+    }
+    
+    function getByName($name)
+    {
+        return isset($this->_names[$name]) ? $this->_names[$name] : null;
+    }
+    
+    function getByAction($action)
+    {
+        return isset($this->_actions[$action]) ? $this->_actions[$action] : null;
     }
 }
