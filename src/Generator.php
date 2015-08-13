@@ -11,4 +11,6 @@ class Generator implements GeneratorInterface
     {
         return '';
     }
+    
+    function generate
 }

@@ -15,7 +15,7 @@ class Route implements RouteInterface
      *
      * @var string
      */
-    protected $_prefix = '';
+    protected $_prefix = '/';
 
     /**
      * path
@@ -106,7 +106,7 @@ class Route implements RouteInterface
      */
     function setPath($path)
     {
-        $this->_path = '/' . trim(trim($path), '/');
+        $this->_path = trim($path, '/');
         return $this;
     }
 
@@ -140,7 +140,7 @@ class Route implements RouteInterface
     {
         return isset($this->_parameters[$name]) ? $this->_parameters[$name] : $default;
     }
-    
+
     /**
      * (non-PHPdoc)
      *
@@ -332,7 +332,7 @@ class Route implements RouteInterface
 
     /**
      * (non-PHPdoc)
-     * 
+     *
      * @see \Slince\Router\RouteInterface::hasOption()
      */
     function hasOption($name)
@@ -348,9 +348,28 @@ class Route implements RouteInterface
      */
     function setPreifx($prefix)
     {
-        $path = '/' . trim($prefix, '/') . $this->_path;
-        $this->_path = $path;
+        $this->_prefix = '/' . trim($prefix, '/');
         return $this;
+    }
+
+    /**
+     * 获取路由前缀
+     * 
+     * @return string
+     */
+    function getPreifx()
+    {
+        return $this->_prefix;
+    }
+
+    /**
+     * 获取带prefix的path
+     * 
+     * @return string
+     */
+    function getFullPath()
+    {
+        return $this->_prefix . '/' . $this->_path;
     }
 
     /**
@@ -410,7 +429,7 @@ class Route implements RouteInterface
         }
         return $this->_compiledRoute;
     }
-    
+
     /**
      * (non-PHPdoc)
      *
@@ -420,14 +439,16 @@ class Route implements RouteInterface
     {
         return $this->_compiledRoute = (new SymfonyRoute($this->_path, $this->_parameters, $this->_requirements, [], $this->_domain, $this->_schemes, $this->_methods))->compile();
     }
-    
+
     protected function _parseParameters($parameters)
     {
         if (is_callable($parameters) || (is_string($parameters) && strpos($parameters, '@'))) {
-            return ['action' => $parameters];
+            return [
+                'action' => $parameters
+            ];
         }
         if (is_array($parameters) && isset($parameters['action'])) {
             return $parameters;
         }
-    } 
+    }
 }
