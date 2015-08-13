@@ -28,9 +28,8 @@ class RouteStore
             $routeKey = $route->getParameter('name');
             $this->_names[$routeKey] = $route;
         }
-        
-        if ($route->hasParameter('action') && is_string($var)) {
-            $action = $route->getParameter('action');
+        $action = $route->getParameter('action');
+        if (is_string($action)) {
             $routeKey = $route->getPrefix() . '/' . $action;
             $this->_actions[$routeKey] = $route;
         }

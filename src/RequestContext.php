@@ -19,4 +19,9 @@ class RequestContext extends SymfonyRequestContext
     {
         return new static();
     }
+    
+    function isSecure()
+    {
+        return strcasecmp($this->getScheme(), 'https') == 0;
+    }
 }

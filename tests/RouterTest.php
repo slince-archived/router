@@ -23,8 +23,9 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             throw $e;
 //             var_dump($route1->getReport());exit;
         }
-        print_r($route->getCompiledRoute()->getStaticPrefix());
-//         print_r($route->getCompiledRoute()->getRegex());
+//         var_dump($route->getPrefix());
+//         print_r($route->getCompiledRoute()->getStaticPrefix());
+        print_r($route->getCompiledRoute()->getRegex());
 //         print_r($route->getCompiledRoute()->getHostRegex());
 //         print_r($route->getCompiledRoute()->getTokens());
 //         print_r($route->getCompiledRoute()->getHostTokens());

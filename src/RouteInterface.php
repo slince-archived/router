@@ -197,6 +197,11 @@ interface RouteInterface
      * @param string $prefix            
      */
     function setPreifx($prefix);
+    
+    /**
+     * 获取路由前缀
+     */
+    function getPrefix();
 
     /**
      * 记录验证器的验证

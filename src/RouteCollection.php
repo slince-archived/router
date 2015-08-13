@@ -56,7 +56,7 @@ class RouteCollection implements \Countable, \IteratorAggregate
     {
         $route->setPreifx($this->_prefix);
         $this->_routes[] = $route;
-        RouteMap::newInstance()->push($route, $this);
+        RouteStore::newInstance()->add($route);
     }
 
     /**
@@ -87,8 +87,6 @@ class RouteCollection implements \Countable, \IteratorAggregate
      */
     function addCollection($prefix, RouteCollection $collection)
     {
-        $routes->setParentCollecton($this);
-        $routes->setTopCollection($this->getTopRoutes());
         $this->_collections[$prefix] = $collection;
     }
 

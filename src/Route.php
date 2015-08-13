@@ -106,7 +106,7 @@ class Route implements RouteInterface
      */
     function setPath($path)
     {
-        $this->_path = trim($path, '/');
+        $this->_path = '/' . trim($path, '/');
         return $this;
     }
 
@@ -353,11 +353,10 @@ class Route implements RouteInterface
     }
 
     /**
-     * 获取路由前缀
-     * 
-     * @return string
+     * (non-PHPdoc)
+     * @see \Slince\Router\RouteInterface::getPrefix()
      */
-    function getPreifx()
+    function getPrefix()
     {
         return $this->_prefix;
     }
@@ -369,7 +368,7 @@ class Route implements RouteInterface
      */
     function getFullPath()
     {
-        return $this->_prefix . '/' . $this->_path;
+        return $this->_prefix . $this->_path;
     }
 
     /**
@@ -442,7 +441,7 @@ class Route implements RouteInterface
 
     protected function _parseParameters($parameters)
     {
-        if (is_callable($parameters) || (is_string($parameters) && strpos($parameters, '@'))) {
+        if (is_callable($parameters) || (is_string($parameters) && strpos($parameters, '@') !== false)) {
             return [
                 'action' => $parameters
             ];
