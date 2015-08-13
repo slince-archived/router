@@ -54,6 +54,10 @@ class Generator extends UrlGenerator implements GeneratorInterface
         if (is_null($requireDomain)) {
             return $this->_context->getHost();
         }
+        return $this->formateRouteDomain($route);
+    }
+    function formateRouteDomain(RouteInterface $route)
+    {
         
     }
     function getDomain()
