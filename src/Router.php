@@ -47,6 +47,7 @@ class Router
         }
         $this->_context = $context;
         $this->_matcher->setContext($context);
+        $this->_generator->setContext($context);
     }
 
     /**
@@ -66,9 +67,9 @@ class Router
      * 
      * @param Route $route            
      */
-    function generate($route)
+    function generate(RouteInterface $route,  $parameters = [], $absolute = true)
     {
-        return $this->_generator->generate($route);
+        return $this->_generator->generate($route, $parameters, $absolute);
     }
 
     /**
