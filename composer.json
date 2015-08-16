@@ -1,6 +1,7 @@
 {
     "name": "slince/router",
     "description": "slince router component",
+    "license": "Apache-2.0",
     "require": {
         "php": "~5.4",
         "symfony/routing": "~2.0"
@@ -13,7 +14,6 @@
             "Slince\\Router\\": "src/"
         }
     },
-    "license": "Apache-2.0",
     "authors": [
         {
             "name": "Tao",
