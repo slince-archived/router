@@ -13,7 +13,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $routes = $router->getRoutes();
         $routes->prefix('user', function(RouteCollection $routes){
             $route1 = $routes->http('/users', ['controller' => 'Users', 'action'=>'index']);
-            $route2 = $routes->http('/users/{id}', ['controller' => 'Users', 'action'=>'home'])
+            $route2 = $routes->http('/users/{id}', ['controller' => 'Users', 'action2'=>'home'])
                 ->setRequirements(['id'=>'\d+', 'subdomain' => '((www|m).)', 'maindomain'=>'baidu'])
                 ->setDomain('{subdomain}{maindomain}.com');
         });

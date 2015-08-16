@@ -15,7 +15,7 @@ class RouteCollection implements \Countable, \IteratorAggregate
      * 
      * @var string
      */
-    protected $_prefix = '';
+    protected $_prefix = '/';
 
     /**
      * route集合
