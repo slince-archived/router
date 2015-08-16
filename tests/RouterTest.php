@@ -8,13 +8,13 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     function testRouter()
     {
         $context = RequestContext::create();
-        $context->setHost('baidu.com');
+        $context->setHost('m.baidu.com');
         $router = RouterFactory::create($context);
         $routes = $router->getRoutes();
         $routes->prefix('user', function(RouteCollection $routes){
             $route1 = $routes->http('/users', ['controller' => 'Users', 'action'=>'index']);
             $route2 = $routes->http('/users/{id}', ['controller' => 'Users', 'action'=>'home'])
-                ->setRequirements(['id'=>'\d+', 'subdomain' => '((www|m).)?', 'maindomain'=>'baidu'])
+                ->setRequirements(['id'=>'\d+', 'subdomain' => '((www|m).)', 'maindomain'=>'baidu'])
                 ->setDomain('{subdomain}{maindomain}.com');
         });
         try {
@@ -22,17 +22,17 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         } catch (\Exception $e) {
             throw $e;
         }
-//         var_dump($route->getPrefix());
-//         print_r($route->getCompiledRoute()->getStaticPrefix());
-//         print_r($route->getCompiledRoute()->getRegex());
-//         print_r($route->getCompiledRoute()->getHostRegex());
-//         print_r($route->getCompiledRoute()->getTokens());
-//         print_r($route->getCompiledRoute()->getHostTokens());
-//         print_r($route->getCompiledRoute()->getPathVariables());
-//         print_r($route->getCompiledRoute()->getHostVariables());
-//         print_r($route->getReport());
-//         print_r($route->getCompiledRoute()->getVariables());exit;
-//         print_r($route->getRouteParameters());exit;
-        echo $url = $router->generate($route, ['id'=>2, 'maindomain'=> 'baidu'], true);
+            // var_dump($route->getPrefix());
+            // print_r($route->getCompiledRoute()->getStaticPrefix());
+            // print_r($route->getCompiledRoute()->getRegex());
+            // print_r($route->getCompiledRoute()->getHostRegex());
+            // print_r($route->getCompiledRoute()->getTokens());
+            // print_r($route->getCompiledRoute()->getHostTokens());
+            // print_r($route->getCompiledRoute()->getPathVariables());
+            // print_r($route->getCompiledRoute()->getHostVariables());
+            // print_r($route->getReport());
+            // print_r($route->getCompiledRoute()->getVariables());exit;
+            // print_r($route->getRouteParameters());exit;
+        echo $url = $router->generate($route, ['id'=>'2', 'maindomain'=> 'baidu', 'ukey'=>1, 'type'=>3]);
     }
 }

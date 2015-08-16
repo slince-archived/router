@@ -16,6 +16,9 @@ class RouterFactory
      */
     static function create(RequestContext $context = null)
     {
+        if (is_null($context)) {
+            $context = RequestContext::create();
+        }
         return new Router(
             RouteCollection::create(),
             new Matcher(),

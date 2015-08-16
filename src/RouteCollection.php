@@ -87,6 +87,7 @@ class RouteCollection implements \Countable, \IteratorAggregate
      */
     function addCollection($prefix, RouteCollection $collection)
     {
+        $collection->setPreifx($this->_prefix . '/' . $prefix);
         $this->_collections[$prefix] = $collection;
     }
 
@@ -113,7 +114,7 @@ class RouteCollection implements \Countable, \IteratorAggregate
     
     function setPreifx($prefix)
     {
-        $this->_prefix = trim($prefix, '/');
+        $this->_prefix = '/' . trim($prefix, '/');
     }
     
     function getPreifx()

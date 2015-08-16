@@ -5,6 +5,7 @@
  */
 namespace Slince\Router;
 
+use Slince\Router\Exception\InvalidParameterException;
 class Generator implements GeneratorInterface
 {
 
@@ -14,6 +15,13 @@ class Generator implements GeneratorInterface
      * @var RequestContext
      */
     protected $_context;
+    
+    /**
+     * 严格检查
+     * 
+     * @var boolean
+     */
+    protected $_strictRequirements = false;
 
     /**
      * 存储最近一个route的route param
@@ -21,36 +29,102 @@ class Generator implements GeneratorInterface
      * @var array
      */
     protected $_routeParameters;
+    
+    function __construct(RequestContext $context = null)
+    {
+        $this->_context = $context;
+    }
+    /**
+     * (non-PHPdoc)
+     *
+     * @see \Slince\Router\GeneratorInterface::setContext()
+     */
+    function setContext(RequestContext $context)
+    {
+        $this->_context = $context;
+    }
+    
+    /**
+     * (non-PHPdoc)
+     *
+     * @see \Slince\Router\GeneratorInterface::getContext()
+     */
+    function getContext()
+    {
+        return $this->_context;
+    }
 
+    /**
+     * 严格匹配模式
+     * @param boolean $enabled
+     */
+    public function setStrictRequirements($enabled)
+    {
+        $this->_strictRequirements = $enabled;
+    }
+    
+    /**
+     * 是否严格匹配模式
+     * 
+     * @return boolean
+     */
+    public function isStrictRequirements()
+    {
+        return $this->_strictRequirements;
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \Slince\Router\GeneratorInterface::generate()
+     */
     function generate(RouteInterface $route, $parameters = [], $absolute = true)
     {
         $compiledRoute = $route->getCompiledRoute();
         // 提供的初始化route parameter
-        $this->_routeParameters = array_merge($route->getParameters(), $this->_context->getParameters(), $parameters);
+        $this->_routeParameters = array_merge($this->_context->getParameters(), $parameters);
         $uri = '';
         // 生成绝对路径，需要构建scheme domain port
         if ($absolute) {
-            list ($scheme, $port) = $this->getRouteSchemeAndPort($route);
-            $domain = $this->getRouteDomain($route);
+            list ($scheme, $port) = $this->_getRouteSchemeAndPort($route);
+            $domain = $this->_getRouteDomain($route);
             $uri .= "{$scheme}://{$domain}{$port}";
         }
-        $uri .= $this->getRoutePath($route);
+        $uri .= $this->_getRoutePath($route);
+        // 提供的多出的数据作为query string
+        $extra = array_diff_key($parameters, $route->getRequirements());
+        if ($extra && $query = http_build_query($extra, '', '&')) {
+            $uri .= '?' . $query;
+        }
         return $uri;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Slince\Router\GeneratorInterface::generateByName()
+     */
     function generateByName($name, $parameters = [], $absolute = true)
     {
         $route = RouteStore::newInstance()->getByName($name);
         return $this->generate($route, $parameters, $absolute);
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Slince\Router\GeneratorInterface::generateByAction()
+     */
     function generateByAction($action, $parameters = [], $absolute = true)
     {
         $route = RouteStore::newInstance()->getByAction($action);
         return $this->generate($route, $parameters, $absolute);
     }
 
-    function getRouteSchemeAndPort(RouteInterface $route)
+    /**
+     * 获取route的scheme和port
+     * 
+     * @param RouteInterface $route
+     * @return array
+     */
+    protected function _getRouteSchemeAndPort(RouteInterface $route)
     {
         $scheme = $this->_context->getScheme();
         $requiredSchemes = $route->getSchemes();
@@ -63,13 +137,15 @@ class Generator implements GeneratorInterface
         } elseif (strcasecmp($scheme, 'https') == 0 && $this->_context->getHttpsPort() != 443) {
             $port = ':' . $this->_context->getHttpsPort();
         }
-        return [
-            $scheme,
-            $port
-        ];
+        return [$scheme, $port];
     }
 
-    function getRouteDomain(RouteInterface $route)
+    /**
+     * 获取route的domain
+     * @param RouteInterface $route
+     * @return string
+     */
+    protected function _getRouteDomain(RouteInterface $route)
     {
         // 如果route没有主机域名限制则直接使用环境中主机
         $requireDomain = $route->getDomain();
@@ -77,53 +153,42 @@ class Generator implements GeneratorInterface
             return $this->_context->getHost();
         }
         // 有限制则根据route的host限制生成域名
-        return $this->formateRouteDomain($route);
-    }
-
-    function formateRouteDomain(RouteInterface $route)
-    {
-        $domain = $this->formateRouteParameters($route->getDomain(), $this->_routeParameters);
-        return $domain;
-    }
-
-    function getRoutePath(RouteInterface $route)
-    {
-        return $this->formateRouteParameters($route->getPath(), $this->_routeParameters);
-    }
-
-    function formateRouteParameters($path, $parameters)
-    {
-        return preg_replace_callback('#\{([a-zA-Z0-9_,]*)\}#', function ($matches) use($parameters)
-        {
-            return isset($parameters[$matches[1]]) ? $parameters[$matches[1]] : '';
-        }, $path);
-    }
-
-    function getDomain()
-    {
-        return preg_replace_callback('/\{(.*?)\??\}/', function ($m) use(&$parameters)
-        {
-            return isset($parameters[$m[1]]) ? Arr::pull($parameters, $m[1]) : $m[0];
-        }, $path);
+        return $this->_formateRouteParameters($requireDomain, $this->_routeParameters, $route->getRequirements());
     }
 
     /**
-     * (non-PHPdoc)
-     * 
-     * @see \Slince\Router\GeneratorInterface::setContext()
+     * 获取route的pathinfo部分
+     * @param RouteInterface $route
+     * @return string
      */
-    function setContext(RequestContext $context)
+    protected function _getRoutePath(RouteInterface $route)
     {
-        $this->_context = $context;
+        return $this->_formateRouteParameters($route->getFullPath(), $this->_routeParameters, $route->getRequirements());
     }
 
     /**
-     * (non-PHPdoc)
-     * 
-     * @see \Slince\Router\GeneratorInterface::getContext()
+     * 格式化route的host和pathinfo部分
+     * @param string $path
+     * @param array $parameters
+     * @param array $requirements
+     * @throws InvalidParameterException
+     * @return string
      */
-    function getContext()
+    protected function _formateRouteParameters($path, $parameters, $requirements = [])
     {
-        return $this->_context;
+        return preg_replace_callback('#\{([a-zA-Z0-9_,]*)\}#', function ($matches) use($parameters, $requirements)
+        {
+            $supportVariable = isset($parameters[$matches[1]]) ? $parameters[$matches[1]] : '';
+            //非严格匹配类型直接返回提供的类型
+            if (! $this->_strictRequirements) {
+                return $supportVariable;
+            }
+            //如果不匹配要求的正则则抛出异常
+            if (isset($requirements[$matches[1]]) && ! preg_match('#^' . $requirements[$matches[1]] . '$#', $supportVariable)) {
+                $message = sprintf('Parameter "%s" must match "%s" ("%s" given) to generate a corresponding URL.', $matches[1], $requirements[$matches[1]], $supportVariable);
+                throw new InvalidParameterException($message);
+            }
+            return $supportVariable;
+        }, $path);
     }
 }

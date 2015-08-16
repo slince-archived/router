@@ -6,6 +6,7 @@
 namespace Slince\Router;
 
 use Symfony\Component\Routing\Route as SymfonyRoute;
+use Slince\Router\Exception\InvalidParameterException;
 
 class Route implements RouteInterface
 {
@@ -253,7 +254,7 @@ class Route implements RouteInterface
      */
     function setMethods(array $methods)
     {
-        $this->_methods = $methods;
+        $this->_methods = array_map('strtolower', $methods);
         return $this;
     }
 
@@ -439,6 +440,11 @@ class Route implements RouteInterface
         return $this->_compiledRoute = (new SymfonyRoute($this->_path, $this->_parameters, $this->_requirements, [], $this->_domain, $this->_schemes, $this->_methods))->compile();
     }
 
+    /**
+     * route参数解析
+     * @param mixed $parameters
+     * @return array
+     */
     protected function _parseParameters($parameters)
     {
         if (is_callable($parameters) || (is_string($parameters) && strpos($parameters, '@') !== false)) {
@@ -449,5 +455,6 @@ class Route implements RouteInterface
         if (is_array($parameters) && isset($parameters['action'])) {
             return $parameters;
         }
+        throw new InvalidParameterException("Must provide the action argument");
     }
 }

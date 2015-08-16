@@ -36,15 +36,12 @@ class Router
      */
     protected $_context;
 
-    function __construct(RouteCollection $routes, MatcherInterface $matcher, GeneratorInterface $generator = null, RequestContext $context = null)
+    function __construct(RouteCollection $routes, MatcherInterface $matcher, GeneratorInterface $generator = null, RequestContext $context)
     {
         $this->_routes = $routes;
         $this->_matcher = $matcher;
         $this->_matcher->getValidators()->merge(ValidatorFactory::getDefaultValidators());
         $this->_generator = $generator;
-        if (is_null($context)) {
-            $context = RequestContext::create();
-        }
         $this->_context = $context;
         $this->_matcher->setContext($context);
         $this->_generator->setContext($context);
