@@ -19,7 +19,7 @@ interface GeneratorInterface
     function generate(RouteInterface $route, $parameters = [], $absolute = true);
 
     /**
-     * 生成特定路由的url
+     * 根据route name生成url
      *
      * @param string $name            
      * @param array $parameters            
@@ -29,7 +29,7 @@ interface GeneratorInterface
     function generateByName($name, $parameters = [], $absolute = true);
 
     /**
-     * 生成特定路由的url
+     * 根据action生成url
      *
      * @param string $action            
      * @param array $parameters            

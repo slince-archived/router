@@ -48,10 +48,12 @@ class Router
     }
 
     /**
-     * 匹配路径寻找路由
-     * 
-     * @param string $path            
-     * @return Route
+     * 生成特定路由的url
+     *
+     * @param RouteInterface $route            
+     * @param array $parameters            
+     * @param boolean $absolute            
+     * @return string
      */
     function match($path)
     {
@@ -61,12 +63,38 @@ class Router
 
     /**
      * 生成一个路径
-     * 
+     *
      * @param Route $route            
      */
-    function generate(RouteInterface $route,  $parameters = [], $absolute = true)
+    function generate(RouteInterface $route, $parameters = [], $absolute = true)
     {
         return $this->_generator->generate($route, $parameters, $absolute);
+    }
+
+    /**
+     * 根据route name生成url
+     *
+     * @param string $name            
+     * @param array $parameters            
+     * @param boolean $absolute            
+     * @return string
+     */
+    function generateByName($name, $parameters = [], $absolute = true)
+    {
+        return $this->_generator->generateByName($name, $parameters, $absolute);
+    }
+
+    /**
+     * 根据action生成url
+     *
+     * @param string $action            
+     * @param array $parameters            
+     * @param boolean $absolute            
+     * @return string
+     */
+    function generateByAction($action, $parameters = [], $absolute = true)
+    {
+        return $this->_generator->generateByAction($action, $parameters, $absolute);
     }
 
     /**
@@ -81,12 +109,22 @@ class Router
 
     /**
      * 获取matcher
-     * 
+     *
      * @return \Slince\Router\MatcherInterface
      */
     function getMatcher()
     {
         return $this->_matcher;
+    }
+
+    /**
+     * 获取generator
+     *
+     * @return \Slince\Router\GeneratorInterface
+     */
+    function getGenerator()
+    {
+        return $this->_generator;
     }
 
     /**

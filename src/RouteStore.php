@@ -54,7 +54,7 @@ class RouteStore
             $this->_names[$routeKey] = $route;
         }
         $action = $route->getParameter('action');
-        if (is_string($action)) {
+        if (! empty($action) && is_string($action)) {
             $routeKey = $route->getPrefix() . '/' . $action;
             $this->_actions[$routeKey] = $route;
         }
@@ -79,6 +79,7 @@ class RouteStore
      */
     function getByAction($action)
     {
+        $action = '/' . trim($action, '/');
         return isset($this->_actions[$action]) ? $this->_actions[$action] : null;
     }
 }

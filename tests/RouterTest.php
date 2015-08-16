@@ -11,6 +11,10 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         //$context->setHost('m.baidu.com');
         $router = RouterFactory::create($context);
         $routes = $router->getRoutes();
+        $routes->http('/user2', [
+            'name' => 'home.dash',
+            'action' => 'UsersController@dashboard'
+        ]);
         $routes->prefix('user', function(RouteCollection $routes){
             $routes->http('/users', 'UsersController@index');
             $routes->http('/users/{id}', 'UsersController@home')
@@ -38,6 +42,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             // print_r($route->getCompiledRoute()->getVariables());exit;
             // print_r($route->getRouteParameters());exit;
 //         echo $router->generate($route, ['id'=>'2', 'maindomain'=> 'baidu', 'ukey'=>1, 'type'=>3]);
-            echo $router->generate($route, [], true);
+            echo $router->generateByAction('/UsersController@dashboard', [], true);
+            echo $router->generateByName('home.dash', ['a'=>'b'], true);
     }
 }

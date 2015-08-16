@@ -6,6 +6,7 @@
 namespace Slince\Router;
 
 use Slince\Router\Exception\InvalidParameterException;
+use Slince\Router\Exception\RouteNotFoundException;
 class Generator implements GeneratorInterface
 {
 
@@ -105,6 +106,9 @@ class Generator implements GeneratorInterface
     function generateByName($name, $parameters = [], $absolute = true)
     {
         $route = RouteStore::newInstance()->getByName($name);
+        if (is_null($route)) {
+            throw new RouteNotFoundException(sprintf('Route "%s" not defined.', $name));
+        }
         return $this->generate($route, $parameters, $absolute);
     }
 
@@ -115,6 +119,9 @@ class Generator implements GeneratorInterface
     function generateByAction($action, $parameters = [], $absolute = true)
     {
         $route = RouteStore::newInstance()->getByAction($action);
+        if (is_null($route)) {
+            throw new RouteNotFoundException(sprintf('Action "%s" not defined.', $action));
+        }
         return $this->generate($route, $parameters, $absolute);
     }
 
