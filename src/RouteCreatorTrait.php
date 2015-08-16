@@ -137,9 +137,8 @@ trait RouteCreatorTrait
     function prefix($prefix, \Closure $callback)
     {
         $routes = RouteCollection::create();
-        $routes->setPreifx($prefix);
-        call_user_func($callback, $routes);
         $this->getRouteCollection()->addCollection($prefix, $routes);
+        call_user_func($callback, $routes);
     }
     
     /**

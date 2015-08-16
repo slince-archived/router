@@ -8,17 +8,21 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     function testRouter()
     {
         $context = RequestContext::create();
-        $context->setHost('m.baidu.com');
+        //$context->setHost('m.baidu.com');
         $router = RouterFactory::create($context);
         $routes = $router->getRoutes();
         $routes->prefix('user', function(RouteCollection $routes){
-            $route1 = $routes->http('/users', ['controller' => 'Users', 'action'=>'index']);
-            $route2 = $routes->http('/users/{id}', ['controller' => 'Users', 'action2'=>'home'])
-                ->setRequirements(['id'=>'\d+', 'subdomain' => '((www|m).)', 'maindomain'=>'baidu'])
+            $routes->http('/users', 'UsersController@index');
+            $routes->http('/users/{id}', 'UsersController@home')
+                ->setRequirements(['id'=>'\d+', 'subdomain' => '((www|m).)?', 'maindomain'=>'baidu'])
                 ->setDomain('{subdomain}{maindomain}.com');
+            $routes->prefix('me', function (RouteCollection $routes) {
+                $routes->http('/account', 'UsersController@me');
+            });
         });
         try {
-            $route = $router->match('/user/users/2');
+//             $route = $router->match('/user/users/2');
+               $route = $router->match('/user/me/account');
         } catch (\Exception $e) {
             throw $e;
         }
@@ -33,6 +37,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             // print_r($route->getReport());
             // print_r($route->getCompiledRoute()->getVariables());exit;
             // print_r($route->getRouteParameters());exit;
-        echo $url = $router->generate($route, ['id'=>'2', 'maindomain'=> 'baidu', 'ukey'=>1, 'type'=>3]);
+//         echo $router->generate($route, ['id'=>'2', 'maindomain'=> 'baidu', 'ukey'=>1, 'type'=>3]);
+            echo $router->generate($route, [], true);
     }
 }

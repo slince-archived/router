@@ -149,7 +149,7 @@ class Generator implements GeneratorInterface
     {
         // 如果route没有主机域名限制则直接使用环境中主机
         $requireDomain = $route->getDomain();
-        if (is_null($requireDomain)) {
+        if (empty($requireDomain)) {
             return $this->_context->getHost();
         }
         // 有限制则根据route的host限制生成域名

@@ -16,7 +16,7 @@ class Route implements RouteInterface
      *
      * @var string
      */
-    protected $_prefix = '/';
+    protected $_prefix = '';
 
     /**
      * path
@@ -349,7 +349,9 @@ class Route implements RouteInterface
      */
     function setPreifx($prefix)
     {
-        $this->_prefix = '/' . trim($prefix, '/');
+        if (! empty($prefix)) {
+            $this->_prefix = '/' . trim($prefix, '/');
+        }
         return $this;
     }
 
@@ -455,6 +457,6 @@ class Route implements RouteInterface
         if (is_array($parameters) && isset($parameters['action'])) {
             return $parameters;
         }
-        throw new InvalidParameterException("Must provide the action argument");
+        throw new InvalidParameterException("Must provide the action argument for route");
     }
 }
