@@ -1,4 +1,8 @@
 <?php
+/**
+ * slince router library
+ * @author Tao <taosikai@yeah.net>
+ */
 namespace Slince\Router\Validator;
 
 use Slince\Router\RouteInterface;
@@ -9,6 +13,10 @@ class PathValidator implements ValidatorInterface
     
     static $id = 'path';
     
+    /**
+     * (non-PHPdoc)
+     * @see \Slince\Router\Validator\ValidatorInterface::validate()
+     */
     function validate(RouteInterface $route, RequestContext $context)
     {
         $matches = [];

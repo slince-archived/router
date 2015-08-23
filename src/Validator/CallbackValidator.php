@@ -1,4 +1,8 @@
 <?php
+/**
+ * slince router library
+ * @author Tao <taosikai@yeah.net>
+ */
 namespace Slince\Router\Validator;
 
 class CallbackValidator implements ValidatorInterface
@@ -8,6 +12,10 @@ class CallbackValidator implements ValidatorInterface
 
     static $id = null;
 
+    /**
+     *
+     * @param \Closure $callback            
+     */
     function __construct(\Closure $callback)
     {
         $this->_callback = $callback;

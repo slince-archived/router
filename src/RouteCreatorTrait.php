@@ -107,12 +107,7 @@ trait RouteCreatorTrait
     function addRoute($path, $parameters)
     {
         $route = $this->newRoute($path, $parameters);
-        if (isset($parameters['as'])) {
-            $route->setOption('name', $parameters['as']);
-            $this->getRouteCollection()->addNamedRoute($parameters['as'], $route);
-        } else {
-            $this->getRouteCollection()->add($route);
-        }
+        $this->getRouteCollection()->add($route);
         return $route;
     }
 
@@ -141,6 +136,10 @@ trait RouteCreatorTrait
         call_user_func($callback, $routes);
     }
     
+    function fallback()
+    {
+        $route = $this->newRoute($path, $parameters);
+    }
     /**
      * 返回适配的routecollection
      * 

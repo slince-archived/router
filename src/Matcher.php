@@ -59,7 +59,8 @@ class Matcher implements MatcherInterface
         foreach ($routes as $route) 
         {
             if ($this->_validate($route)) {
-                $route->setRouteParameters($this->_handleRouteParameters($route));
+                $this->_handleRouteParameters($route);
+                $this->_handleRouteAction($route);
                 return $route;
             }
         }
@@ -141,9 +142,10 @@ class Matcher implements MatcherInterface
         }
         return true;
     }
+    
     /**
-     * 
-     * @param unknown $validatorId
+     * 记下被验证器阻止的route
+     * @param int $validatorId
      * @param RouteInterface $route
      */
     protected function _writeReport($validatorId, RouteInterface $route)
@@ -158,12 +160,32 @@ class Matcher implements MatcherInterface
      * 处理路由参数
      * 
      * @param RouteInterface $route
-     * @return array
+     * @return void
      */
     protected function _handleRouteParameters(RouteInterface $route)
     {
         $catchedParameters = call_user_func_array('array_merge', $route->getReport());
         $variables = $route->getCompiledRoute()->getVariables();
-        return array_intersect_key($catchedParameters, array_flip($variables));
+        $routeParameters = array_intersect_key($catchedParameters, array_flip($variables));
+        $route->setRouteParameters($routeParameters);
+    }
+    
+    /**
+     * 处理路由action
+     * 
+     * @param RouteInterface $route
+     * @return void
+     */
+    protected function _handleRouteAction(RouteInterface $route)
+    {
+        $routeParameters = $route->getRouteParameters();
+        if (! empty($routeParameters)) {
+            $action = preg_replace_callback('#\{([a-zA-Z0-9_,]*)\}#', function ($matches) use($routeParameters) {
+                if (isset($routeParameters[$matches[1]])) {
+                    return $routeParameters[$matches[1]];
+                }
+            }, $route->getParameter('action'));
+            $route->setParameter('action', $action);
+        }
     }
 }
