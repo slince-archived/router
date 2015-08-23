@@ -136,9 +136,14 @@ trait RouteCreatorTrait
         call_user_func($callback, $routes);
     }
     
+    /**
+     * 设置一个后备route
+     * 在route设置完成之后调用
+     */
     function fallback()
     {
-        $route = $this->newRoute($path, $parameters);
+        return $this->addRoute('/{controller}/{action}{falback}', '{controller}@{action}')
+            ->setRequirement('falback', '.*');
     }
     /**
      * 返回适配的routecollection
